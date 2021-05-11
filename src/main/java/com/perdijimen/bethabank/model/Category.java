@@ -1,18 +1,21 @@
 package com.perdijimen.bethabank.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "categories")
 public class Category {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
     @Column
+    @ApiModelProperty("Nombre de la categoría")
     private String name;
 
     public Category() {
