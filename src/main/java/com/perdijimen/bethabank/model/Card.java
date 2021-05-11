@@ -1,25 +1,41 @@
 package com.perdijimen.bethabank.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cards")
 public class Card {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
+    @Column
+    @ApiModelProperty("Cadena de texto del número de tarjeta")
     private String card_number;
 
+    @Column
+    @ApiModelProperty("Cadena de texto del código CVV de tarjeta")
     private String CVV;
 
+    @Column
+    @ApiModelProperty("Tipo de tarjeta: crédito, débito, corriente")
     private String name_type;
 
+    @Column
+    @ApiModelProperty("Fecha de caducidad de la tarjeta")
     private String expiration_date;
 
+    @Column
+    @ApiModelProperty("Fecha de creación de la tarjeta")
     private String created_at;
 
+    @Column
+    @ApiModelProperty("Contraseña de la tarjeta")
     private String password;
 
     public Card() {

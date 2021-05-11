@@ -1,24 +1,37 @@
 package com.perdijimen.bethabank.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "accounts")
 public class Account {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
+    @Column
+    @ApiModelProperty("Nombre del tipo de cuenta")
     private String name;
 
+    @Column
+    @ApiModelProperty("Cadena de texto del código IBAN de la cuenta")
     private String IBAN;
 
+    @Column
+    @ApiModelProperty("Total de saldo de la cuenta")
     private Double balance;
 
+    @Column
+    @ApiModelProperty("Fecha de alta de la cuenta")
     private LocalDate created_at;
 
+    @Column
+    @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate utdated_at;
 
     public Account() {

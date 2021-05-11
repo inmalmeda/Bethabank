@@ -1,51 +1,66 @@
 package com.perdijimen.bethabank.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
     @Column
+    @ApiModelProperty("Nombre completo del usuario")
     private String name;
 
     @Column
+    @ApiModelProperty("Apellido del usuario")
     private String lastname;
 
     @Column
-    private Date birth_day;
+    @ApiModelProperty("Fecha de nacimiento del usuario")
+    private LocalDate birth_day;
 
     @Column
+    @ApiModelProperty("Teléfono del usuario")
     private String phone;
 
     @Column
+    @ApiModelProperty("Dirección de email del usuario")
     private String email;
 
     @Column
+    @ApiModelProperty("Contraseña del usuario")
     private String password;
 
     @Column
+    @ApiModelProperty("DNI del usuario")
     private String DNI;
 
     @Column
+    @ApiModelProperty("Dirección del usuario")
     private String address;
 
     @Column
+    @ApiModelProperty("Localidad de la dirección del usuario")
     private String location;
 
     @Column
+    @ApiModelProperty("País de la dirección del usuario")
     private String country;
 
     @Column
-    private Date created_at;
+    @ApiModelProperty("Fecha de alta del usuario")
+    private LocalDate created_at;
 
     @Column
-    private Date updated_at;
+    @ApiModelProperty("Fecha de última actualización del usuario")
+    private LocalDate updated_at;
 
    // @OneToMany(mappedBy = "users")
   //  private List<account> account = new ArrayList();
@@ -54,7 +69,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String lastname, Date birth_day, String phone, String email, String password, String DNI, String address, String location, String country, Date created_at, Date updated_at) {
+    public User(String name, String lastname, LocalDate birth_day, String phone, String email, String password, String DNI, String address, String location, String country, LocalDate created_at, LocalDate updated_at) {
         this.name = name;
         this.lastname = lastname;
         this.birth_day = birth_day;
@@ -93,11 +108,11 @@ public class User {
         this.lastname = lastname;
     }
 
-    public Date getBirth_day() {
+    public LocalDate getBirth_day() {
         return birth_day;
     }
 
-    public void setBirth_day(Date birth_day) {
+    public void setBirth_day(LocalDate birth_day) {
         this.birth_day = birth_day;
     }
 
@@ -157,19 +172,19 @@ public class User {
         this.country = country;
     }
 
-    public Date getCreated_at() {
+    public LocalDate getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Date created_at) {
+    public void setCreated_at(LocalDate created_at) {
         this.created_at = created_at;
     }
 
-    public Date getUpdated_at() {
+    public LocalDate getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(Date updated_at) {
+    public void setUpdated_at(LocalDate updated_at) {
         this.updated_at = updated_at;
     }
 

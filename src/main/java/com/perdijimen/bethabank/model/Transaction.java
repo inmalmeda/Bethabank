@@ -1,6 +1,8 @@
 package com.perdijimen.bethabank.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -10,20 +12,23 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
     @Column
+    @ApiModelProperty("Cantidad de la transacción")
     private Double amount;
 
     @Column
-    private LocalDate transction_date;
+    @ApiModelProperty("Fecha de la transacción")
+    private LocalDate transaction_date;
 
     public Transaction() {
     }
 
-    public Transaction(Double amount, LocalDate transction_date) {
+    public Transaction(Double amount, LocalDate transaction_date) {
         this.amount = amount;
-        this.transction_date = transction_date;
+        this.transaction_date = transaction_date;
     }
 
     public Long getId() {
@@ -42,12 +47,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public LocalDate getTransction_date() {
-        return transction_date;
+    public LocalDate getTransaction_date() {
+        return transaction_date;
     }
 
-    public void setTransction_date(LocalDate transction_date) {
-        this.transction_date = transction_date;
+    public void setTransaction_date(LocalDate transaction_date) {
+        this.transaction_date = transaction_date;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class Transaction {
         return "Transaction{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", transction_date=" + transction_date +
+                ", transaction_date=" + transaction_date +
                 '}';
     }
 }
