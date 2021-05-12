@@ -68,8 +68,4 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
-    @Override
-    public Account getAccountByIBAN(String IBAN) {
-        return accountRepository.findByIBAN(IBAN);
-    }
 }
