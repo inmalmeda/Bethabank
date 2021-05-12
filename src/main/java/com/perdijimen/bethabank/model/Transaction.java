@@ -24,6 +24,10 @@ public class Transaction {
     @ApiModelProperty("Fecha de la transacción")
     private LocalDate transaction_date;
 
+    @Column
+    @ApiModelProperty("Número de cuenta ajena de la que se recibe el ingreso o a la que se envía la transacción")
+    private String accountOut;
+
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
@@ -46,9 +50,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double amount, LocalDate transaction_date) {
+    public Transaction(Double amount, LocalDate transaction_date, String accountOut) {
         this.amount = amount;
         this.transaction_date = transaction_date;
+        this.accountOut = accountOut;
     }
 
     public Long getId() {
@@ -73,6 +78,14 @@ public class Transaction {
 
     public void setTransaction_date(LocalDate transaction_date) {
         this.transaction_date = transaction_date;
+    }
+
+    public String getAccountOut() {
+        return accountOut;
+    }
+
+    public void setAccountOut(String accountOut) {
+        this.accountOut = accountOut;
     }
 
     public Account getAccount() {
