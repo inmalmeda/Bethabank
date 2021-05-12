@@ -28,6 +28,10 @@ public class Transaction {
     @ApiModelProperty("Número de cuenta ajena de la que se recibe el ingreso o a la que se envía la transacción")
     private String accountOut;
 
+    @Column
+    @ApiModelProperty("Tipo de transacción: Positiva o Negativa")
+    private Boolean isIncome;
+
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
@@ -50,10 +54,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double amount, LocalDate transaction_date, String accountOut) {
+    public Transaction(Double amount, LocalDate transaction_date, String accountOut, Boolean isIncome) {
         this.amount = amount;
         this.transaction_date = transaction_date;
         this.accountOut = accountOut;
+        this.isIncome = isIncome;
     }
 
     public Long getId() {
@@ -112,13 +117,23 @@ public class Transaction {
         this.category = category;
     }
 
+    public Boolean getIncome() {
+        return isIncome;
+    }
+
+    public void setIncome(Boolean income) {
+        isIncome = income;
+    }
+
+
     @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
                 ", amount=" + amount +
                 ", transaction_date=" + transaction_date +
-
+                ", accountOut='" + accountOut + '\'' +
+                ", isIncome=" + isIncome +
                 '}';
     }
 }
