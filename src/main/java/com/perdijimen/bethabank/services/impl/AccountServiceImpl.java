@@ -1,13 +1,11 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,10 +37,10 @@ public class AccountServiceImpl implements AccountService {
                 account.setUpdated_at(LocalDate.now());
                 accountCreated = accountRepository.save(account);
             }catch(Exception e) {
-                log.error("Cannot save the user: {} , error : {}", account, e);
+                log.error("Cannot save the account: {} , error : {}", account, e);
             }
         }else{
-            log.warn("Creating user with id");
+            log.warn("Creating account with id");
         }
 
         return accountCreated;

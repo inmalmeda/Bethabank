@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,11 @@ public class Card {
 
     @Column
     @ApiModelProperty("Fecha de creación de la tarjeta")
-    private String created_at;
+    private LocalDate created_at;
+
+    @Column
+    @ApiModelProperty("Fecha de actualización de la tarjeta")
+    private LocalDate updated_at;
 
     @Column
     @ApiModelProperty("Contraseña de la tarjeta")
@@ -60,12 +65,14 @@ public class Card {
     public Card() {
     }
 
-    public Card(String card_number, String CVV, String name_type, String expiration_date, String created_at, String password) {
+    public Card(Long id, String card_number, String CVV, String name_type, String expiration_date, LocalDate created_at, LocalDate updated_at, String password) {
+        this.id = id;
         this.card_number = card_number;
         this.CVV = CVV;
         this.name_type = name_type;
         this.expiration_date = expiration_date;
         this.created_at = created_at;
+        this.updated_at = updated_at;
         this.password = password;
     }
 
@@ -109,12 +116,20 @@ public class Card {
         this.expiration_date = expiration_date;
     }
 
-    public String getCreated_at() {
+    public LocalDate getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(LocalDate created_at) {
         this.created_at = created_at;
+    }
+
+    public LocalDate getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(LocalDate updated_at) {
+        this.updated_at = updated_at;
     }
 
     public String getPassword() {

@@ -12,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Rest controller of users
+ * Rest controller of accounts
  */
 @RestController
 @RequestMapping("/api")
