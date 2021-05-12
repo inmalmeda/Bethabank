@@ -3,6 +3,7 @@ package com.perdijimen.bethabank;
 import com.perdijimen.bethabank.model.*;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.repository.CategoryRepository;
+import com.perdijimen.bethabank.repository.TransationRepository;
 import com.perdijimen.bethabank.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,11 +20,13 @@ public class BethabankApplication implements CommandLineRunner {
 	final UserRepository userRepository;
 	final CardRepository cardRepository;
 	final CategoryRepository categoryRepository;
+	final TransationRepository transationRepository;
 
-	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository) {
+	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository, TransationRepository transationRepository) {
 		this.userRepository = userRepository;
 		this.cardRepository = cardRepository;
 		this.categoryRepository = categoryRepository;
+		this.transationRepository = transationRepository;
 	}
 
 	public static void main(String[] args) {
@@ -35,31 +38,14 @@ public class BethabankApplication implements CommandLineRunner {
 
 		List<User> userList = createDataUser();
 		List<Card> cardList = createDataCard();
+		List<Transaction> transactionList = createDataTransation();
+		List<Category> categoryList = createDataCategory();
 
 		relationUserCard(userList, cardList);
+		relationCategoryTransation(categoryList,transactionList);
 
 		Account accoun1 = new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.now(),LocalDate.now());
 		Account accoun2 = new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.now(),LocalDate.now());
-
-		Transaction transaction1 = new Transaction(200.35,LocalDate.now());
-		Transaction transaction2 = new Transaction(150.35,LocalDate.now());
-
-		Category category1 = new Category("Hogar");
-		Category category2 = new Category("Gasolina");
-		Category category3 = new Category("Supermercado");
-		Category category4 = new Category("Colegio");
-
-
-		List<Transaction> transationList = new ArrayList<>();
-
-		transationList.add(transaction1);
-		transationList.add(transaction2);
-
-		transaction1.setCategory(category1);
-
-		category1.setTransactionList(transationList);
-
-		categoryRepository.save(category1);
 
 
 	}
@@ -108,14 +94,27 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Transaction> createDataTransation () {
 		List<Transaction> transationList = new ArrayList<>();
 
-		transationList.add(new Transaction(200.35,LocalDate.now()));
-		transationList.add(new Transaction(150.35,LocalDate.now()));
+		transationList.add(new Transaction(200.35,LocalDate.now(),""));
+		transationList.add(new Transaction(150.35,LocalDate.now(),""));
+		transationList.add(new Transaction(432.45,LocalDate.now(),""));
 
 		return transationList;
 	}
 
 	private void relationCategoryTransation (List<Category> categoryList, List<Transaction> transactionList) {
 
-	}
+		transactionList.get(0).setCategory(categoryList.get(0));
+		transactionList.get(1).setCategory(categoryList.get(1));
+		transactionList.get(2).setCategory(categoryList.get(1));
 
+		categoryList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
+		categoryList.get(1).setTransactionList(Arrays.asList(transactionList.get(1),transactionList.get(2)));
+
+		for (Category category: categoryList) {
+			categoryRepository.save(category);
+		}
+
+		transationRepository.save(transactionList.get(0));
+		transationRepository.save(transactionList.get(1));
+	}
 }
