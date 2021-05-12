@@ -32,7 +32,7 @@ public class Card {
 
     @Column
     @ApiModelProperty("Fecha de caducidad de la tarjeta")
-    private String expiration_date;
+    private LocalDate expiration_date;
 
     @Column
     @ApiModelProperty("Fecha de creación de la tarjeta")
@@ -65,8 +65,7 @@ public class Card {
     public Card() {
     }
 
-    public Card(Long id, String card_number, String CVV, String name_type, String expiration_date, LocalDate created_at, LocalDate updated_at, String password) {
-        this.id = id;
+    public Card( String card_number, String CVV, String name_type, LocalDate expiration_date, LocalDate created_at, LocalDate updated_at, String password) {
         this.card_number = card_number;
         this.CVV = CVV;
         this.name_type = name_type;
@@ -108,11 +107,11 @@ public class Card {
         this.name_type = name_type;
     }
 
-    public String getExpiration_date() {
+    public LocalDate getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(String expiration_date) {
+    public void setExpiration_date(LocalDate expiration_date) {
         this.expiration_date = expiration_date;
     }
 
