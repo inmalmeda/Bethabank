@@ -35,7 +35,7 @@ public class Account {
 
     @Column
     @ApiModelProperty("Fecha de última actualización de la cuenta")
-    private LocalDate utdated_at;
+    private LocalDate updated_at;
 
     @JsonIgnore
     @ManyToOne()
@@ -64,7 +64,7 @@ public class Account {
         this.IBAN = IBAN;
         this.balance = balance;
         this.created_at = created_at;
-        this.utdated_at = utdated_at;
+        this.updated_at = updated_at;
     }
 
     public Long getId() {
@@ -107,12 +107,12 @@ public class Account {
         this.created_at = created_at;
     }
 
-    public LocalDate getUtdated_at() {
-        return utdated_at;
+    public LocalDate getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUtdated_at(LocalDate utdated_at) {
-        this.utdated_at = utdated_at;
+    public void setUpdated_at(LocalDate updated_at) {
+        this.updated_at = updated_at;
     }
 
     public List<Transaction> getTransactionList() {
@@ -155,7 +155,7 @@ public class Account {
                 ", IBAN='" + IBAN + '\'' +
                 ", balance=" + balance +
                 ", created_at=" + created_at +
-                ", utdated_at=" + utdated_at +
+                ", updated_at=" + updated_at +
                 '}';
     }
 }
