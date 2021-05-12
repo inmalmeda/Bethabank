@@ -1,6 +1,7 @@
 package com.perdijimen.bethabank.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -22,6 +23,23 @@ public class Transaction {
     @Column
     @ApiModelProperty("Fecha de la transacción")
     private LocalDate transaction_date;
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @Column(nullable = true)
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "card_id")
+    private Card card;
+
 
     public Transaction() {
     }
@@ -55,12 +73,21 @@ public class Transaction {
         this.transaction_date = transaction_date;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
                 ", amount=" + amount +
                 ", transaction_date=" + transaction_date +
+                ", category=" + category +
                 '}';
     }
 }

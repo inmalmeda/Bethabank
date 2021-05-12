@@ -1,9 +1,12 @@
 package com.perdijimen.bethabank.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cards")
@@ -37,6 +40,19 @@ public class Card {
     @Column
     @ApiModelProperty("Contraseña de la tarjeta")
     private String password;
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "cards", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionList = new ArrayList();
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     public Card() {
     }
@@ -104,6 +120,22 @@ public class Card {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.perdijimen.bethabank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -33,6 +36,18 @@ public class Account {
     @Column
     @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate utdated_at;
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionList = new ArrayList();
+
+    @OneToMany(mappedBy = "cards", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cardList = new ArrayList();
 
     public Account() {
     }
@@ -91,6 +106,30 @@ public class Account {
 
     public void setUtdated_at(LocalDate utdated_at) {
         this.utdated_at = utdated_at;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
+    public List<Card> getCardList() {
+        return cardList;
+    }
+
+    public void setCardList(List<Card> cardList) {
+        this.cardList = cardList;
     }
 
     @Override

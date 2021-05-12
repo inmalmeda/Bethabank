@@ -1,9 +1,12 @@
 package com.perdijimen.bethabank.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -17,6 +20,10 @@ public class Category {
     @Column
     @ApiModelProperty("Nombre de la categoría")
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionList = new ArrayList();
 
     public Category() {
     }
@@ -39,6 +46,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
     @Override
