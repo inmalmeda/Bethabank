@@ -1,6 +1,6 @@
 package com.perdijimen.bethabank.dao.impl;
 
-import com.perdijimen.bethabank.dao.UserDAO;
+import com.perdijimen.bethabank.dao.UserDao;
 import com.perdijimen.bethabank.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager manager;
