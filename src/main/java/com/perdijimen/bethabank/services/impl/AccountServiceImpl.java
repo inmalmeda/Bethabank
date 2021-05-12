@@ -1,5 +1,6 @@
 package com.perdijimen.bethabank.services.impl;
 
+import com.perdijimen.bethabank.dao.AccountDAO;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -19,10 +20,12 @@ public class AccountServiceImpl implements AccountService {
     @PersistenceContext
     private EntityManager manager;
 
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
+    private AccountDAO accountDAO;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountDAO accountDAO) {
         this.accountRepository = accountRepository;
+        this.accountDAO = accountDAO;
     }
 
     @Override
@@ -63,5 +66,10 @@ public class AccountServiceImpl implements AccountService {
             log.warn("Cannot save account: {}, because it doesn´t exist", account);
         }
         return result;
+    }
+
+    @Override
+    public Account getAccountByIBAN(String IBAN) {
+        return accountRepository.findByIBAN(IBAN);
     }
 }

@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @PersistenceContext
     private EntityManager manager;
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;

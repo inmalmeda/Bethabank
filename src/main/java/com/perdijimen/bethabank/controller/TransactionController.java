@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Transaction;
+import com.perdijimen.bethabank.model.request.TransactionRequest;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.TransactionService;
@@ -33,15 +34,15 @@ public class TransactionController {
 
     /**
      * It saves a transaction and returns the transaction created with id
-     * @param transaction New transaction
+     * @param transactionRequest New transaction
      * @return Transaction created
      */
     @PostMapping("/transactions")
     @ApiOperation("Guarda en base de datos un movimiento nuevo")
     public ResponseEntity<Transaction> createTransaction(@ApiParam("Objeto movimiento nuevo")
-                                           @RequestBody Transaction transaction) throws URISyntaxException {
+                                           @RequestBody TransactionRequest transactionRequest) throws URISyntaxException {
 
-        Transaction transactionDB = transactionService.createTransaction(transaction);
+        Transaction transactionDB = transactionService.createTransaction(transactionRequest.getTransaction(), transactionRequest.getIdAccount());
 
         return transactionDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                 ResponseEntity.created(new URI("/api/transactions/" + transactionDB.getId())).body(transactionDB);

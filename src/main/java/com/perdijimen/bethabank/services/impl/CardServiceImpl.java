@@ -19,7 +19,7 @@ public class CardServiceImpl implements CardService {
     @PersistenceContext
     private EntityManager manager;
 
-    CardRepository cardRepository;
+    private CardRepository cardRepository;
 
     public CardServiceImpl(CardRepository cardRepository) {
         this.cardRepository = cardRepository;

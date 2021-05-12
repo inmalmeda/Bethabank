@@ -7,4 +7,6 @@ public interface AccountService {
     Account createAccount(Account account);
 
     Account updateAccount(Account account);
+
+    Account getAccountByIBAN (String IBAN);
 }

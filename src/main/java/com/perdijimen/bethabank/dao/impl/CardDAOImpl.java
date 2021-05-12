@@ -1,7 +1,7 @@
 package com.perdijimen.bethabank.dao.impl;
 
-import com.perdijimen.bethabank.dao.AccountDao;
-import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.dao.CardDAO;
+import com.perdijimen.bethabank.model.Card;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,17 +12,17 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-public class AccountDaoImpl implements AccountDao{
+public class CardDAOImpl implements CardDAO {
 
     @PersistenceContext
     private EntityManager manager;
 
 
     @Override
-    public Optional<Account> findByIdFromEntityManager(Long id) {
+    public Optional<Card> findByIdFromEntityManager(Long id) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
-        CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
-        Root<Account> root = criteria.from(Account.class);
+        CriteriaQuery<Card> criteria = builder.createQuery(Card.class);
+        Root<Card> root = criteria.from(Card.class);
 
         criteria.select(root);
 
@@ -32,10 +32,10 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public List<Account> findAll(Integer limite, Integer pagina) {
+    public List<Card> findAll(Integer limite, Integer pagina) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
-        CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
-        Root<Account> root = criteria.from(Account.class);
+        CriteriaQuery<Card> criteria = builder.createQuery(Card.class);
+        Root<Card> root = criteria.from(Card.class);
         criteria.select(root);
 
         Query query = manager.createQuery(criteria);
@@ -43,7 +43,7 @@ public class AccountDaoImpl implements AccountDao{
         query.setMaxResults(limite); // size
         query.setFirstResult(pagina); // pagination
 
-        List<Account> users = query.getResultList();
+        List<Card> users = query.getResultList();
 
         return users;
     }
