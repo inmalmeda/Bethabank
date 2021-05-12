@@ -37,22 +37,23 @@ public class Account {
     @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate utdated_at;
 
-
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "titular_id")
+    @ApiModelProperty("Titular de la cuenta")
     private User titularUser;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "ownersAccountList",fetch = FetchType.LAZY)
+    @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
     private List<User>  ownersUsers;
 
-
-
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty("Lista de movimientos realizados con la cuenta")
      private List<Transaction> transactionList;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty("Lista de tarjetas asociadas a la cuenta")
      private List<Card> cardList;
 
     public Account() {

@@ -23,6 +23,7 @@ public class Category {
 
     @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty("Lista de movimientos asociados a la categoría")
     private List<Transaction> transactionList ;
 
     public Category() {

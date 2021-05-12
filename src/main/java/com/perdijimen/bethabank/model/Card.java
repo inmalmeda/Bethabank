@@ -44,16 +44,18 @@ public class Card {
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "user_id")
+    @ApiModelProperty("Titular de la tarjeta")
     private User user;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty("Lista de movimientos realizados con la tarjeta")
     private List<Transaction> transactionList;
 
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
+    @ApiModelProperty("Cuenta a la que pertenece la tarjeta")
     private Account account;
-
 
     public Card() {
     }

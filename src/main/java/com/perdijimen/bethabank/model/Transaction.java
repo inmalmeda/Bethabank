@@ -24,23 +24,23 @@ public class Transaction {
     @ApiModelProperty("Fecha de la transacción")
     private LocalDate transaction_date;
 
-
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
+    @ApiModelProperty("Cuenta con la que se realiza la transacción")
     private Account account;
-
 
    @JsonIgnore
    @ManyToOne()
    @JoinColumn(name = "category_id")
+   @ApiModelProperty("Categoría a la que pertenece la transacción")
    private Category category;
 
    @JsonIgnore
    @ManyToOne()
    @JoinColumn(name = "card_id")
+   @ApiModelProperty("Tarjeta con la que se realiza la transacción, puede ser de valor nulo")
    private Card card;
-
 
 
     public Transaction() {

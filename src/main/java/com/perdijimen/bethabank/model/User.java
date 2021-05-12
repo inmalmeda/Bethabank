@@ -66,6 +66,7 @@ public class User {
     private LocalDate updated_at;
 
     @OneToMany(mappedBy = "titularUser")
+    @ApiModelProperty("Lista de cuentas en las que es titular el usuario")
     private List<Account> titularAccountList;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -74,12 +75,12 @@ public class User {
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name="account_id", referencedColumnName = "id")}
     )
+    @ApiModelProperty("Lista de las cuentas en las que el usuario participa como titular o subtitular")
     private List<Account> ownersAccountList;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
     private List<Card> cardList;
-
 
     public User() {
     }
