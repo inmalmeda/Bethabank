@@ -8,11 +8,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Service
 public class UserServiceImpl implements UserService {
 
 
     private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @PersistenceContext
+    private EntityManager manager;
 
     UserRepository userRepository;
 
