@@ -40,8 +40,13 @@ public class Account {
 
     @JsonIgnore
     @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "titular_id")
+    private User titularUser;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ownersAccountList",fetch = FetchType.LAZY)
+    private List<User>  ownersUsers;
+
 
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -109,15 +114,6 @@ public class Account {
         this.utdated_at = utdated_at;
     }
 
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public List<Transaction> getTransactionList() {
         return transactionList;
     }
@@ -132,6 +128,22 @@ public class Account {
 
     public void setCardList(List<Card> cardList) {
         this.cardList = cardList;
+    }
+
+    public User getTitularUser() {
+        return titularUser;
+    }
+
+    public void setTitularUser(User titularUser) {
+        this.titularUser = titularUser;
+    }
+
+    public List<User> getOwnersUsers() {
+        return ownersUsers;
+    }
+
+    public void setOwnersUsers(List<User> ownersUsers) {
+        this.ownersUsers = ownersUsers;
     }
 
     @Override

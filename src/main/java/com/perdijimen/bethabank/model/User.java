@@ -65,8 +65,17 @@ public class User {
     @ApiModelProperty("Fecha de última actualización del usuario")
     private LocalDate updated_at;
 
-    @OneToMany(mappedBy = "user")
-    private List<Account> accountList;
+    @OneToMany(mappedBy = "titularUser")
+    private List<Account> titularAccountList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="user_account",
+            joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name="account_id", referencedColumnName = "id")}
+    )
+    private List<Account> ownersAccountList;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cardList;
@@ -194,15 +203,13 @@ public class User {
         this.updated_at = updated_at;
     }
 
-
-    public List<Account> getAccountList() {
-        return accountList;
+    public List<Account> getOwnersAccountList() {
+        return ownersAccountList;
     }
 
-    public void setAccountList(List<Account> accountList) {
-        this.accountList = accountList;
+    public void setOwnersAccountList(List<Account> ownersAccountList) {
+        this.ownersAccountList = ownersAccountList;
     }
-
 
     public List<Card> getCardList() {
         return cardList;
@@ -212,7 +219,13 @@ public class User {
         this.cardList = cardList;
     }
 
+    public List<Account> getTitularAccountList() {
+        return titularAccountList;
+    }
 
+    public void setTitularAccountList(List<Account> titularAccountList) {
+        this.titularAccountList = titularAccountList;
+    }
 
     @Override
     public String toString() {
