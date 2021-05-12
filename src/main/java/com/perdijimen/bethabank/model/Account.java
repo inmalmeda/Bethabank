@@ -37,17 +37,18 @@ public class Account {
     @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate utdated_at;
 
+
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactionList = new ArrayList();
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+     private List<Transaction> transactionList;
 
-    @OneToMany(mappedBy = "cards", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cardList = new ArrayList();
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+     private List<Card> cardList;
 
     public Account() {
     }
@@ -107,6 +108,7 @@ public class Account {
     public void setUtdated_at(LocalDate utdated_at) {
         this.utdated_at = utdated_at;
     }
+
 
     public User getUser() {
         return user;

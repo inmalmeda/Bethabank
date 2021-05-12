@@ -46,13 +46,14 @@ public class Card {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cards", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactionList = new ArrayList();
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionList;
 
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
     private Account account;
+
 
     public Card() {
     }
@@ -128,6 +129,14 @@ public class Card {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public List<Transaction> getTransactionList() {

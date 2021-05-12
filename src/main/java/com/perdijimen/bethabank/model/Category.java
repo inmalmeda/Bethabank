@@ -22,8 +22,8 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactionList = new ArrayList();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionList ;
 
     public Category() {
     }

@@ -24,21 +24,23 @@ public class Transaction {
     @ApiModelProperty("Fecha de la transacción")
     private LocalDate transaction_date;
 
-    @JsonIgnore
-    @ManyToOne()
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @Column(nullable = true)
-    @JsonIgnore
-    @ManyToOne()
-    @JoinColumn(name = "card_id")
-    private Card card;
+
+   @JsonIgnore
+   @ManyToOne()
+   @JoinColumn(name = "category_id")
+   private Category category;
+
+   @JsonIgnore
+   @ManyToOne()
+   @JoinColumn(name = "card_id")
+   private Card card;
+
 
 
     public Transaction() {
@@ -73,6 +75,22 @@ public class Transaction {
         this.transaction_date = transaction_date;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -87,7 +105,7 @@ public class Transaction {
                 "id=" + id +
                 ", amount=" + amount +
                 ", transaction_date=" + transaction_date +
-                ", category=" + category +
+
                 '}';
     }
 }
