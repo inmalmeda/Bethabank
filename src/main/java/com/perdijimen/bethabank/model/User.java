@@ -78,7 +78,7 @@ public class User {
     @ApiModelProperty("Lista de las cuentas en las que el usuario participa como titular o subtitular")
     private List<Account> ownersAccountList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
     private List<Card> cardList;
 
@@ -228,6 +228,7 @@ public class User {
         this.titularAccountList = titularAccountList;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
@@ -244,7 +245,9 @@ public class User {
                 ", country='" + country + '\'' +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
-
+                ", titularAccountList=" + titularAccountList +
+                ", ownersAccountList=" + ownersAccountList +
+                ", cardList=" + cardList +
                 '}';
     }
 }

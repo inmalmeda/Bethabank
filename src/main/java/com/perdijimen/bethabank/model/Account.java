@@ -48,11 +48,11 @@ public class Account {
     @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
     private List<User>  ownersUsers;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", orphanRemoval = true)
     @ApiModelProperty("Lista de movimientos realizados con la cuenta")
      private List<Transaction> transactionList;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", orphanRemoval = true)
     @ApiModelProperty("Lista de tarjetas asociadas a la cuenta")
      private List<Card> cardList;
 
