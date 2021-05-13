@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Rest controller of users
@@ -22,6 +24,23 @@ public class UserController {
 
     public UserController (UserService userService){
         this.userService = userService;
+    }
+
+    @GetMapping("/users")
+    public List<User> userListFilter(@RequestParam(name="name", required = false) String name,
+                                     @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
+                                     @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
+
+        if (name != null) {
+            return this.userService.findAllByName(name, limit, page) ;
+        }
+        return this.userService.findAll(limit, page);
+    }
+
+    @GetMapping("/users/{id}")
+    public Optional<User> userFilterById(@PathVariable Long id)  {
+
+        return this.userService.findById(id);
     }
 
     /**

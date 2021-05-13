@@ -1,16 +1,16 @@
 package com.perdijimen.bethabank.services.impl;
 
+import com.perdijimen.bethabank.dao.UserDao;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.UserRepository;
 import com.perdijimen.bethabank.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,13 +18,28 @@ public class UserServiceImpl implements UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @PersistenceContext
-    private EntityManager manager;
 
     private UserRepository userRepository;
+    private UserDao userDao;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserDao userDao) {
         this.userRepository = userRepository;
+        this.userDao = userDao;
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return this.userDao.findById(id);
+    }
+
+    @Override
+    public List<User> findAll(Integer limit, Integer page) {
+        return this.userDao.findAll(limit, page);
+    }
+
+    @Override
+    public List<User> findAllByName(String name, Integer limit, Integer page) {
+        return this.userDao.findAllByName(name, limit, page);
     }
 
     @Override
@@ -35,6 +50,9 @@ public class UserServiceImpl implements UserService {
         User userCreated = null;
 
         if(user.getId() == null){
+
+           //Comprobar DNI y comprobar Email
+
             try{
                 user.setCreated_at(LocalDate.now());
                 user.setUpdated_at(LocalDate.now());

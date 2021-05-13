@@ -7,6 +7,11 @@ import java.util.Optional;
 
 public interface AccountDao {
 
-    Optional<Account> findByIdFromEntityManager(Long id);
-    List<Account> findAll(Integer limite, Integer pagina);
+    Optional<Account> findById(Long id);
+
+    List<Account> findAll(Long idUser,Integer limite, Integer pagina);
+
+    List<Account> findAllByName(String name, Integer limite, Integer pagina);
+
+
 }

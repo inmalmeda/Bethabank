@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.AccountDao;
 import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -25,6 +28,21 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
+    }
+
+    @Override
+    public Optional<Account> findById(Long id) {
+        return this.accountDAO.findById(id);
+    }
+
+    @Override
+    public List<Account> findAll(Long idUser, Integer limit, Integer page) {
+        return this.accountDAO.findAll(idUser, limit, page);
+    }
+
+    @Override
+    public List<Account> findAllByName(String name, Integer limit, Integer page) {
+        return this.accountDAO.findAllByName(name, limit, page);
     }
 
     @Override

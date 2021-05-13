@@ -7,6 +7,9 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    Optional<User> findByIdFromEntityManager(Long id);
+    Optional<User> findById(Long id);
+
     List<User> findAll(Integer limite, Integer pagina);
+
+    List<User> findAllByName(String name, Integer limit, Integer page);
 }
