@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface CardDao {
 
-    Optional<Card> findByIdFromEntityManager(Long id);
-    List<Card> findAll(Integer limite, Integer pagina);
+    Optional<Card> findById(Long id);
+    List<Card> findAll(Long idUser, Integer limite, Integer pagina);
 }

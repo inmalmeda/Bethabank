@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Rest controller of cards
@@ -22,6 +24,25 @@ public class CardController {
 
     public CardController(CardService cardService) {
         this.cardService = cardService;
+    }
+
+    /**
+     * It returns all cards depending of idUser
+     * @return Response with list of user´s cards
+     */
+    @GetMapping("/cards")
+    @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
+    public ResponseEntity<List<Card>> findAll(@RequestParam(name= "id") Long idUser,
+                                              @RequestParam(name = "page", defaultValue="0") Integer page,
+                                              @RequestParam(name = "limit", defaultValue="5") Integer limit){
+
+        List<Card> cardList = cardService.findAll(idUser, limit, page);
+
+        if(cardList.isEmpty()){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }else{
+            return  ResponseEntity.ok().body(cardList);
+        }
     }
 
     /**

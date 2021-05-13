@@ -75,6 +75,7 @@ public class BethabankApplication implements CommandLineRunner {
 		List<Account> accountList = accounts;
 
 		accountList.get(0).setCardList(Arrays.asList(cardList.get(0), cardList.get(1)));
+		accountList.get(2).setCardList(Arrays.asList(cardList.get(2)));
 		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0), transactionList.get(1), transactionList.get(2)));
 		accountList.get(0).setUserList(Arrays.asList(userList.get(0)));
 		accountList.get(1).setUserList(Arrays.asList(userList.get(0), userList.get(1)));
@@ -91,8 +92,10 @@ public class BethabankApplication implements CommandLineRunner {
 
 		cardList.get(0).setAccount(accountList.get(0));
 		cardList.get(1).setAccount(accountList.get(0));
+		cardList.get(2).setAccount(accountList.get(2));
 		cardList.get(0).setUser(userList.get(0));
 		cardList.get(1).setUser(userList.get(0));
+		cardList.get(2).setUser(userList.get(1));
 		cardList.get(0).setTransactionList(Arrays.asList(transactionList.get(2)));
 
 		return cardList;
@@ -102,6 +105,7 @@ public class BethabankApplication implements CommandLineRunner {
 		List<User> userList = users;
 
 		userList.get(0).setCardList(Arrays.asList(cards.get(0), cards.get(1)));
+		userList.get(1).setCardList(Arrays.asList(cards.get(2)));
 		userList.get(0).setOwnerAccountList(Arrays.asList(accountList.get(0),accountList.get(1)));
 		userList.get(1).setOwnerAccountList(Arrays.asList(accountList.get(1),accountList.get(2)));
 		userList.get(0).setTitularAccountList(Arrays.asList(accountList.get(0),accountList.get(1)));
@@ -174,6 +178,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		cardList.add( new Card("34534534353453","333","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"2233"));
 		cardList.add( new Card("43535435345435","232","debit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4455"));
+		cardList.add( new Card("43535435345400","282","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4400"));
 
 		return cardList;
 	}

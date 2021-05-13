@@ -1,5 +1,6 @@
 package com.perdijimen.bethabank.services.impl;
 
+import com.perdijimen.bethabank.dao.CardDao;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.services.CardService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -20,9 +22,22 @@ public class CardServiceImpl implements CardService {
     private EntityManager manager;
 
     private CardRepository cardRepository;
+    private CardDao cardDao;
 
-    public CardServiceImpl(CardRepository cardRepository) {
+    public CardServiceImpl(CardRepository cardRepository, CardDao cardDao) {
         this.cardRepository = cardRepository;
+        this.cardDao = cardDao;
+    }
+
+    @Override
+    public List<Card> findAll(Long idUser, Integer limit, Integer page) {
+        log.debug("Find all cards");
+        return cardDao.findAll(idUser, limit, page);
+    }
+
+    @Override
+    public Card findById(Long id) {
+        return null;
     }
 
     @Override
