@@ -77,6 +77,7 @@ public class BethabankApplication implements CommandLineRunner {
 		accountList.get(0).setCardList(Arrays.asList(cardList.get(0)));
 		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
 		accountList.get(0).setUserList(Arrays.asList(userList.get(0)));
+		accountList.get(1).setUserList(Arrays.asList(userList.get(0)));
 		accountList.get(0).setTitularUser(userList.get(0));
 
 		return accountList;
@@ -96,7 +97,7 @@ public class BethabankApplication implements CommandLineRunner {
 		List<User> userList = users;
 
 		userList.get(0).setCardList(Arrays.asList(cards.get(0)));
-		userList.get(0).setOwnerAccountList(Arrays.asList(accountList.get(0)));
+		userList.get(0).setOwnerAccountList(Arrays.asList(accountList.get(0),accountList.get(1)));
 
 		return userList;
 	}

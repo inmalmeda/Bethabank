@@ -79,7 +79,7 @@ public class User {
     @ApiModelProperty("Lista de las cuentas en las que el usuario participa")
     private List<Account> ownerAccountList;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
     private List<Card> cardList;
 

@@ -52,7 +52,7 @@ public class Card {
     @ApiModelProperty("Titular de la tarjeta")
     private User user;
 
-    @OneToMany(mappedBy = "card", orphanRemoval = true)
+    @OneToMany(mappedBy = "card")
     @ApiModelProperty("Lista de movimientos realizados con la tarjeta")
     private List<Transaction> transactionList;
 
