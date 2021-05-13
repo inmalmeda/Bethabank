@@ -3,6 +3,7 @@ package com.perdijimen.bethabank.controller;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.response.AnalyticResponse;
 import com.perdijimen.bethabank.services.AccountService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,18 +30,56 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    /**
+     * It returns all accounts depending of idUser
+     * @return Response with list of user´s accounts
+     */
     @GetMapping("/accounts")
-    public List<Account> userListFilter(@RequestParam(name="id", required = false) Long idUser,
+    @ApiOperation("Encuentra todas las cuentas con filtro de id de usuario y paginación")
+    public ResponseEntity<List<Account>> findAll(@RequestParam(name="id", required = false) Long idUser,
                                      @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
                                      @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
 
-        return this.accountService.findAll(idUser, limit, page);
+        List<Account> accountList = accountService.findAll(idUser, limit, page);
+
+        if(accountList.isEmpty()){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }else{
+            return  ResponseEntity.ok().body(accountList);
+        }
+
     }
 
+    /**
+     * It returns an account by id
+     * @param id Long id of account
+     * @return Response with an account from database
+     */
     @GetMapping("/accounts/{id}")
-    public Optional<Account> userFilterById(@PathVariable Long id)  {
+    @ApiOperation("Encuentra una cuenta por su id")
+    public ResponseEntity<Optional<Account>> findOne(@PathVariable Long id)  {
 
-        return this.accountService.findById(id);
+        Optional<Account> account = accountService.findById(id);
+
+        if(account == null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }else{
+            return  ResponseEntity.ok().body(account);
+        }
+    }
+
+    /**
+     * It returns analytics of an account
+     * @return Response with analytic of account
+     */
+    @GetMapping("/accounts/analytics")
+    @ApiOperation("Genera un análisis de una cuenta según sus gastos e ingresos")
+    public ResponseEntity<List<AnalyticResponse>> analyticAccount(@RequestParam(name="id") Long idAccount,
+                                                            @RequestParam(name="typePeriod", defaultValue = "1") Boolean typePeriod)  {
+
+        List<AnalyticResponse> analyticList = accountService.getAnalytics(idAccount, typePeriod);
+
+        return  ResponseEntity.ok().body(analyticList);
     }
 
     /**

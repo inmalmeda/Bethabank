@@ -1,8 +1,10 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.AccountDao;
+import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.Transaction;
+import com.perdijimen.bethabank.model.response.AnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,26 +28,74 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountRepository accountRepository;
 
-    private AccountDao accountDAO;
+    private AccountDao accountDao;
+    private TransactionDao transactionDao;
 
-    public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDAO) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDao,
+                              TransactionDao transactionDao) {
         this.accountRepository = accountRepository;
-        this.accountDAO = accountDAO;
+        this.accountDao = accountDao;
+        this.transactionDao = transactionDao;
     }
 
     @Override
     public Optional<Account> findById(Long id) {
-        return this.accountDAO.findById(id);
+        return this.accountDao.findById(id);
     }
 
     @Override
     public List<Account> findAll(Long idUser, Integer limit, Integer page) {
-        return this.accountDAO.findAll(idUser, limit, page);
+        return this.accountDao.findAll(idUser, limit, page);
     }
 
     @Override
-    public List<Account> findAllByName(String name, Integer limit, Integer page) {
-        return this.accountDAO.findAllByName(name, limit, page);
+    public List<AnalyticResponse> getAnalytics (Long idAccount, Boolean typePeriod){
+        LocalDate startDate;
+        LocalDate endDate;
+        int year = LocalDate.now().getYear();
+        List<AnalyticResponse> analytic = new ArrayList<>();
+
+        if(idAccount != null && accountDao.findById(idAccount).isPresent()){
+            //Si es tipo mes
+            if(typePeriod){
+                startDate = LocalDate.of(year, 1, 1);
+                endDate = LocalDate.of(year, 12, 31);
+            }else{
+                int startYear = accountDao.findById(idAccount).get().getCreated_at().getYear();
+                startDate =  LocalDate.of(startYear, 1, 31);
+                endDate = LocalDate.of(year, 12, 31);
+            }
+            List<Transaction> transactionList = transactionDao.getAnalyticTransactions(idAccount, startDate, endDate);
+
+            if(!transactionList.isEmpty()){
+                //Selección mes de comienzo del analytics
+                int monthSelect = transactionList.get(0).getTransaction_date().getMonthValue();
+                analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(0).getTransaction_date().getYear() ,
+                        monthSelect , 1),0.0, 0.0));
+                for (int i = 0; i<transactionList.size(); i++) {
+                    //Si el mes seleccionado es igual que el mes de la transacción
+                    if(monthSelect == transactionList.get(i).getTransaction_date().getMonthValue()){
+                        AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
+                        if(transactionList.get(i).getIncome()){
+                            analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(0).getAmount());
+                        }else{
+                            analyticResponse.setInCome(analyticResponse.getExpense() + transactionList.get(0).getAmount());
+                        }
+                    }else{
+                        monthSelect = transactionList.get(i).getTransaction_date().getMonthValue();
+
+                        if (transactionList.get(i).getIncome()){
+                            analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
+                                    monthSelect , 1),transactionList.get(i).getAmount(), 0.0));
+                        }else{
+                            analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
+                                    monthSelect , 1),0.0, transactionList.get(i).getAmount()));
+                        }
+                    }
+                }
+            }
+        }
+        return analytic;
     }
 
     @Override
@@ -86,5 +137,7 @@ public class AccountServiceImpl implements AccountService {
         }
         return result;
     }
+
+
 
 }
