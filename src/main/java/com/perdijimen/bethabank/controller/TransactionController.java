@@ -10,13 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Rest controller of transactions
@@ -31,6 +29,21 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @GetMapping("/transactions")
+    @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
+    public ResponseEntity<List<Transaction>> findAll(@RequestParam(name= "id") Long idUser,
+                                                     @RequestParam(name= "isIncome") Boolean isIncome,
+                                              @RequestParam(name = "page", defaultValue="0") Integer page,
+                                              @RequestParam(name = "limit", defaultValue="5") Integer limit) {
+
+        List<Transaction> transactionList = transactionService.findAll(idUser, isIncome, limit, page);
+
+        if (transactionList.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.ok().body(transactionList);
+        }
+    }
 
     /**
      * It saves a transaction and returns the transaction created with id

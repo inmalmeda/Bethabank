@@ -2,7 +2,6 @@ package com.perdijimen.bethabank.dao.impl;
 
 import com.perdijimen.bethabank.dao.AccountDao;
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import org.springframework.stereotype.Repository;
 

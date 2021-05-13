@@ -1,5 +1,6 @@
 package com.perdijimen.bethabank.services.impl;
 
+import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.repository.AccountRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,12 +28,19 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
     private AccountService accountService;
     private AccountRepository accountRepository;
+    private TransactionDao transactionDao;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, AccountService accountService,
-                                  AccountRepository accountRepository) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, AccountService accountService, AccountRepository accountRepository, TransactionDao transactionDao) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
         this.accountRepository = accountRepository;
+        this.transactionDao = transactionDao;
+    }
+
+    @Override
+    public List<Transaction> findAll(Long idAccount, Boolean type, Integer limit, Integer page) {
+        log.debug("Find all transactions");
+        return transactionDao.findAll(idAccount, type, limit, page);
     }
 
     @Override
