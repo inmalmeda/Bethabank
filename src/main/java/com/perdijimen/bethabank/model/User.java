@@ -1,11 +1,9 @@
 package com.perdijimen.bethabank.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -65,18 +63,15 @@ public class User {
     @ApiModelProperty("Fecha de última actualización del usuario")
     private LocalDate updated_at;
 
-    @OneToMany(mappedBy = "titularUser")
-    @ApiModelProperty("Lista de cuentas en las que es titular el usuario")
-    private List<Account> titularAccountList;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name="user_account",
-            joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
+            name="owners_account",
+            joinColumns = {@JoinColumn(name="owner_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name="account_id", referencedColumnName = "id")}
     )
-    @ApiModelProperty("Lista de las cuentas en las que el usuario participa como titular o subtitular")
-    private List<Account> ownersAccountList;
+    @ApiModelProperty("Lista de las cuentas en las que el usuario participa")
+    private List<Account> accountList;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
@@ -204,12 +199,12 @@ public class User {
         this.updated_at = updated_at;
     }
 
-    public List<Account> getOwnersAccountList() {
-        return ownersAccountList;
+    public List<Account> getAccountList() {
+        return accountList;
     }
 
-    public void setOwnersAccountList(List<Account> ownersAccountList) {
-        this.ownersAccountList = ownersAccountList;
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
     }
 
     public List<Card> getCardList() {
@@ -219,15 +214,6 @@ public class User {
     public void setCardList(List<Card> cardList) {
         this.cardList = cardList;
     }
-
-    public List<Account> getTitularAccountList() {
-        return titularAccountList;
-    }
-
-    public void setTitularAccountList(List<Account> titularAccountList) {
-        this.titularAccountList = titularAccountList;
-    }
-
 
     @Override
     public String toString() {
@@ -245,8 +231,7 @@ public class User {
                 ", country='" + country + '\'' +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
-                ", titularAccountList=" + titularAccountList +
-                ", ownersAccountList=" + ownersAccountList +
+                ", ownersAccountList=" + accountList +
                 ", cardList=" + cardList +
                 '}';
     }

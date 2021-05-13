@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,16 +36,11 @@ public class Account {
     @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate updated_at;
 
-    @JsonIgnore
-    @ManyToOne()
-    @JoinColumn(name = "titular_id")
-    @ApiModelProperty("Titular de la cuenta")
-    private User titularUser;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "ownersAccountList",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "accountList",fetch = FetchType.LAZY)
     @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
-    private List<User>  ownersUsers;
+    private List<User> userList;
 
     @OneToMany(mappedBy = "account", orphanRemoval = true)
     @ApiModelProperty("Lista de movimientos realizados con la cuenta")
@@ -131,20 +125,12 @@ public class Account {
         this.cardList = cardList;
     }
 
-    public User getTitularUser() {
-        return titularUser;
+    public List<User> getUserList() {
+        return userList;
     }
 
-    public void setTitularUser(User titularUser) {
-        this.titularUser = titularUser;
-    }
-
-    public List<User> getOwnersUsers() {
-        return ownersUsers;
-    }
-
-    public void setOwnersUsers(List<User> ownersUsers) {
-        this.ownersUsers = ownersUsers;
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
     @Override
