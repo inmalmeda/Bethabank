@@ -245,6 +245,7 @@ public class User {
                 ", country='" + country + '\'' +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
+                ", titularAccountList=" + titularAccountList +
                 ", ownersAccountList=" + ownerAccountList +
                 ", cardList=" + cardList +
                 '}';

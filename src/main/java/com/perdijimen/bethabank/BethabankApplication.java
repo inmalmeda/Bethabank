@@ -17,14 +17,14 @@ public class BethabankApplication implements CommandLineRunner {
 	final UserRepository userRepository;
 	final CardRepository cardRepository;
 	final CategoryRepository categoryRepository;
-	final TransationRepository transationRepository;
+	final TransactionRepository transactionRepository;
 	final AccountRepository accountRepository;
 
-	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository, TransationRepository transationRepository, AccountRepository accountRepository) {
+	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository, TransactionRepository transactionRepository, AccountRepository accountRepository) {
 		this.userRepository = userRepository;
 		this.cardRepository = cardRepository;
 		this.categoryRepository = categoryRepository;
-		this.transationRepository = transationRepository;
+		this.transactionRepository = transactionRepository;
 		this.accountRepository = accountRepository;
 	}
 
@@ -65,7 +65,7 @@ public class BethabankApplication implements CommandLineRunner {
 		}
 
 		for (Transaction transaction: transactionList) {
-			transationRepository.save(transaction);
+			transactionRepository.save(transaction);
 		}
 
 	}

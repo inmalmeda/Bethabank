@@ -156,6 +156,10 @@ public class Account {
                 ", balance=" + balance +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
+                ", titularUser=" + titularUser +
+                ", userList=" + userList +
+                ", transactionList=" + transactionList +
+                ", cardList=" + cardList +
                 '}';
     }
 }

@@ -1,8 +1,11 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.UserDao;
+import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.UserRepository;
+import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +24,12 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserDao userDao;
+    private CardService cardService;
 
-    public UserServiceImpl(UserRepository userRepository, UserDao userDao) {
+    public UserServiceImpl(UserRepository userRepository, UserDao userDao, CardService cardService) {
         this.userRepository = userRepository;
         this.userDao = userDao;
+        this.cardService = cardService;
     }
 
     @Override
@@ -44,26 +49,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-
         log.info("createUSer");
 
         User userCreated = null;
 
-        if(user.getId() == null){
+        if(user.getId() == null && user.getEmail() == null && user.getDNI() == null) {
 
-           //Comprobar DNI y comprobar Email
+            List<User> userEmail = userRepository.findByEmail(user.getEmail());
+            List<User> userDNI = userRepository.findByDNI(user.getDNI());
 
-            try{
-                user.setCreated_at(LocalDate.now());
-                user.setUpdated_at(LocalDate.now());
-                userCreated = userRepository.save(user);
-            }catch(Exception e) {
-                log.error("Cannot save the user: {} , error : {}", user, e);
+            if (!userEmail.isEmpty() && !userDNI.isEmpty()) {
+                try {
+                    if (user.getCardList() != null) {
+                        for (Card card : user.getCardList()) {
+                            card.setUser(user);
+                            userRepository.save(user);
+                            cardService.createCard(card);
+                        }
+                    }
+
+                    user.setCreated_at(LocalDate.now());
+                    user.setUpdated_at(LocalDate.now());
+                    userCreated = userRepository.save(user);
+                } catch (Exception e) {
+                    log.error("Cannot save the user: {} , error : {}", user, e);
+                }
+            } else {
+                log.warn("Creating user with id");
             }
-        }else{
-            log.warn("Creating user with id");
-        }
 
+        }
         return userCreated;
     }
 
