@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Rest controller of cards
@@ -44,6 +45,25 @@ public class CardController {
             return  ResponseEntity.ok().body(cardList);
         }
     }
+
+    /**
+     * It returns a card by id
+     * @param id Long id of card
+     * @return Response with a card from database
+     */
+    @GetMapping("/cards/{id}")
+    @ApiOperation("Encuentra una tarjeta por su id")
+    public  ResponseEntity<Optional<Card>>findOne(@ApiParam("Clave primaria de la tarjeta") @PathVariable Long id) {
+
+        Optional<Card> card = cardService.findById(id);
+
+        if(card == null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }else{
+            return  ResponseEntity.ok().body(card);
+        }
+    }
+
 
     /**
      * It saves a card and returns the card created with id

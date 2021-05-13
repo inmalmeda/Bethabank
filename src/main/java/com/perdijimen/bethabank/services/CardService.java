@@ -3,12 +3,13 @@ package com.perdijimen.bethabank.services;
 import com.perdijimen.bethabank.model.Card;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CardService {
 
     List<Card> findAll(Long idUser, Integer limit, Integer page);
 
-    Card findById(Long id);
+    Optional<Card> findById(Long id);
 
     Card createCard(Card card);
 

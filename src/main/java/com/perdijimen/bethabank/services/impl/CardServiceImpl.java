@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -36,8 +37,9 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card findById(Long id) {
-        return null;
+    public Optional<Card> findById(Long id) {
+        log.debug("Find one card by id: {}", id);
+        return cardDao.findById(id);
     }
 
     @Override

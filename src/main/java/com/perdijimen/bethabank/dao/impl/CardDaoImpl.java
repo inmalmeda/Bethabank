@@ -23,7 +23,6 @@ public class CardDaoImpl implements CardDao {
     @PersistenceContext
     private EntityManager manager;
 
-
     @Override
     public Optional<Card> findById(Long id) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
