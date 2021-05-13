@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Transaction;
+import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.request.TransactionRequest;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.CardService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Rest controller of transactions
@@ -43,6 +45,12 @@ public class TransactionController {
         } else {
             return ResponseEntity.ok().body(transactionList);
         }
+    }
+
+    @GetMapping("/transactions/{id}")
+    public Optional<Transaction> userFilterById(@PathVariable Long id)  {
+
+        return this.transactionService.findById(id);
     }
 
     /**

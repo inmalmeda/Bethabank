@@ -3,6 +3,7 @@ package com.perdijimen.bethabank.services.impl;
 import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Transaction;
+import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -35,6 +36,11 @@ public class TransactionServiceImpl implements TransactionService {
         this.accountService = accountService;
         this.accountRepository = accountRepository;
         this.transactionDao = transactionDao;
+    }
+
+    @Override
+    public Optional<Transaction> findById(Long id) {
+        return this.transactionDao.findById(id);
     }
 
     @Override

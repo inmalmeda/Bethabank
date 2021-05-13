@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TransactionDaoImpl implements TransactionDao {
@@ -19,6 +20,19 @@ public class TransactionDaoImpl implements TransactionDao {
     @PersistenceContext
     private EntityManager manager;
 
+
+    @Override
+    public Optional<Transaction> findById(Long id) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+        Root<Transaction>root = criteria.from(Transaction.class);
+
+        criteria.select(root);
+
+        criteria.where(builder.equal(root.get("id"), id));
+
+        return Optional.of(manager.createQuery(criteria).getSingleResult());
+    }
 
     @Override
     public List<Transaction> findAll(Long idAccount, Boolean type, Integer limit, Integer page) {
