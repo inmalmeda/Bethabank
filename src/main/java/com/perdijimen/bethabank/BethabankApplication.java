@@ -74,11 +74,14 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Account> relationAccount (List<User> userList, List<Card> cardList, List<Transaction> transactionList, List<Account> accounts) {
 		List<Account> accountList = accounts;
 
-		accountList.get(0).setCardList(Arrays.asList(cardList.get(0)));
-		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
+		accountList.get(0).setCardList(Arrays.asList(cardList.get(0), cardList.get(1)));
+		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0), transactionList.get(1), transactionList.get(2)));
 		accountList.get(0).setUserList(Arrays.asList(userList.get(0)));
-		accountList.get(1).setUserList(Arrays.asList(userList.get(0)));
+		accountList.get(1).setUserList(Arrays.asList(userList.get(0), userList.get(1)));
+		accountList.get(2).setUserList(Arrays.asList(userList.get(1)));
 		accountList.get(0).setTitularUser(userList.get(0));
+		accountList.get(1).setTitularUser(userList.get(0));
+		accountList.get(2).setTitularUser(userList.get(1));
 
 		return accountList;
 	}
@@ -87,8 +90,10 @@ public class BethabankApplication implements CommandLineRunner {
 		List<Card> cardList = cards;
 
 		cardList.get(0).setAccount(accountList.get(0));
+		cardList.get(1).setAccount(accountList.get(0));
 		cardList.get(0).setUser(userList.get(0));
-		cardList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
+		cardList.get(1).setUser(userList.get(0));
+		cardList.get(0).setTransactionList(Arrays.asList(transactionList.get(2)));
 
 		return cardList;
 	}
@@ -96,8 +101,11 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<User> relationUser (List<User> users, List<Card> cards, List<Account> accountList) {
 		List<User> userList = users;
 
-		userList.get(0).setCardList(Arrays.asList(cards.get(0)));
+		userList.get(0).setCardList(Arrays.asList(cards.get(0), cards.get(1)));
 		userList.get(0).setOwnerAccountList(Arrays.asList(accountList.get(0),accountList.get(1)));
+		userList.get(1).setOwnerAccountList(Arrays.asList(accountList.get(1),accountList.get(2)));
+		userList.get(0).setTitularAccountList(Arrays.asList(accountList.get(0),accountList.get(1)));
+		userList.get(1).setTitularAccountList(Arrays.asList(accountList.get(2)));
 
 		return userList;
 	}
@@ -107,7 +115,11 @@ public class BethabankApplication implements CommandLineRunner {
 
 		transactionList.get(0).setAccount(accountList.get(0));
 		transactionList.get(0).setCategory(categoryList.get(0));
-		transactionList.get(0).setCard(cards.get(0));
+		transactionList.get(1).setAccount(accountList.get(0));
+		transactionList.get(1).setCategory(categoryList.get(1));
+		transactionList.get(2).setAccount(accountList.get(0));
+		transactionList.get(2).setCategory(categoryList.get(0));
+		transactionList.get(2).setCard(cards.get(0));
 
 		return transactionList;
 	}
@@ -115,7 +127,8 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Category> relationCategory (List<Category> categories, List<Transaction> transations) {
 		List<Category> categoryList = categories;
 
-		categoryList.get(0).setTransactionList(Arrays.asList(transations.get(0)));
+		categoryList.get(0).setTransactionList(Arrays.asList(transations.get(0),transations.get(2)));
+		categoryList.get(1).setTransactionList(Arrays.asList(transations.get(1)));
 
 		return categoryList;
 	}
@@ -135,6 +148,8 @@ public class BethabankApplication implements CommandLineRunner {
 		transationList.add(new Transaction(200.35,LocalDate.now(),"" , true));
 		transationList.add(new Transaction(150.35,LocalDate.now(),"",true));
 		transationList.add(new Transaction(432.45,LocalDate.now(),"",false));
+
+		/*
 		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));
 		transationList.add(new Transaction(23.40,LocalDate.now(),"",true));
 		transationList.add(new Transaction(86.20,LocalDate.now(),"",false));
@@ -142,7 +157,7 @@ public class BethabankApplication implements CommandLineRunner {
 		transationList.add(new Transaction(10.14,LocalDate.now(),"",false));
 		transationList.add(new Transaction(5.35,LocalDate.now(),"",true));
 		transationList.add(new Transaction(32.60,LocalDate.now(),"",false));
-
+*/
 		return transationList;
 	}
 
