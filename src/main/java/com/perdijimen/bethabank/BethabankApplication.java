@@ -134,6 +134,13 @@ public class BethabankApplication implements CommandLineRunner {
 		transationList.add(new Transaction(200.35,LocalDate.now(),"" , true));
 		transationList.add(new Transaction(150.35,LocalDate.now(),"",true));
 		transationList.add(new Transaction(432.45,LocalDate.now(),"",false));
+		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));
+		transationList.add(new Transaction(23.40,LocalDate.now(),"",true));
+		transationList.add(new Transaction(86.20,LocalDate.now(),"",false));
+		transationList.add(new Transaction(110.10,LocalDate.now(),"",true));
+		transationList.add(new Transaction(10.14,LocalDate.now(),"",false));
+		transationList.add(new Transaction(5.35,LocalDate.now(),"",true));
+		transationList.add(new Transaction(32.60,LocalDate.now(),"",false));
 
 		return transationList;
 	}
@@ -151,7 +158,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		cardList.add( new Card("34534534353453","333","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"2233"));
 		cardList.add( new Card("43535435345435","232","debit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4455"));
-		cardList.add(new Card("456565675667676","111","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"5566"));
+
 		return cardList;
 	}
 
@@ -162,6 +169,9 @@ public class BethabankApplication implements CommandLineRunner {
 		categoryList.add(new Category("Gasolina"));
 		categoryList.add(new Category("Supermercado"));
 		categoryList.add(new Category("Colegio"));
+		categoryList.add(new Category("Textil"));
+		categoryList.add(new Category("Comercio"));
+		categoryList.add(new Category("Restaurante"));
 
 		return categoryList;
 	}
