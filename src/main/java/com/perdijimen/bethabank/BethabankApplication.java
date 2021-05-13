@@ -140,9 +140,9 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Account> createDataAccount () {
 		List<Account> accountList = new ArrayList<>();
 
-		accountList.add(new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.now(),LocalDate.now()));
-		accountList.add(new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.now(),LocalDate.now()));
-		accountList.add(new Account("Cuenta ahorro","ES78 45364565465464565465464",50000.00,LocalDate.now(),LocalDate.now()));
+		accountList.add(new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.of(2009, 10, 5),LocalDate.now()));
+		accountList.add(new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.of(2012, 9, 20),LocalDate.now()));
+		accountList.add(new Account("Cuenta ahorro","ES78 45364565465464565465464",50000.00,LocalDate.of(2018, 5, 3),LocalDate.now()));
 		return accountList;
 	}
 
@@ -151,7 +151,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		transationList.add(new Transaction(200.35,LocalDate.of(2021, 1, 1),"" , true));
 		transationList.add(new Transaction(150.35,LocalDate.of(2020, 5, 10),"",true));
-		transationList.add(new Transaction(432.45,LocalDate.of(2021, 2, 12),"",false));
+		transationList.add(new Transaction(432.45,LocalDate.of(2021, 2, 12),"",true));
 
 		/*
 		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));

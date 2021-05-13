@@ -67,33 +67,7 @@ public class AccountServiceImpl implements AccountService {
             }
             List<Transaction> transactionList = transactionDao.getAnalyticTransactions(idAccount, startDate, endDate);
 
-            if(!transactionList.isEmpty()){
-                //Selección mes de comienzo del analytics
-                int monthSelect = transactionList.get(0).getTransaction_date().getMonthValue();
-                analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(0).getTransaction_date().getYear() ,
-                        monthSelect , 1),0.0, 0.0));
-                for (int i = 0; i<transactionList.size(); i++) {
-                    //Si el mes seleccionado es igual que el mes de la transacción
-                    if(monthSelect == transactionList.get(i).getTransaction_date().getMonthValue()){
-                        AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
-                        if(transactionList.get(i).getIncome()){
-                            analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(0).getAmount());
-                        }else{
-                            analyticResponse.setInCome(analyticResponse.getExpense() + transactionList.get(0).getAmount());
-                        }
-                    }else{
-                        monthSelect = transactionList.get(i).getTransaction_date().getMonthValue();
-
-                        if (transactionList.get(i).getIncome()){
-                            analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
-                                    monthSelect , 1),transactionList.get(i).getAmount(), 0.0));
-                        }else{
-                            analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
-                                    monthSelect , 1),0.0, transactionList.get(i).getAmount()));
-                        }
-                    }
-                }
-            }
+            analytic = typePeriod ? monthAnalytics(transactionList) : yearAnalytics(transactionList);
         }
         return analytic;
     }
@@ -138,6 +112,72 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
+    private List<AnalyticResponse> monthAnalytics ( List<Transaction> transactionList){
+
+        List<AnalyticResponse> analytic = new ArrayList<>();
+
+        if(!transactionList.isEmpty()){
+            //Selección mes de comienzo del analytics
+            int monthSelect = transactionList.get(0).getTransaction_date().getMonthValue();
+            analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(0).getTransaction_date().getYear() ,
+                    monthSelect , 1),0.0, 0.0));
+            for (int i = 0; i<transactionList.size(); i++) {
+                //Si el mes seleccionado es igual que el mes de la transacción
+                if(monthSelect == transactionList.get(i).getTransaction_date().getMonthValue()){
+                    AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
+                    if(transactionList.get(i).getIncome()){
+                        analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(i).getAmount());
+                    }else{
+                        analyticResponse.setExpense(analyticResponse.getExpense() + transactionList.get(i).getAmount());
+                    }
+                }else{
+                    monthSelect = transactionList.get(i).getTransaction_date().getMonthValue();
+
+                    if (transactionList.get(i).getIncome()){
+                        analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
+                                monthSelect , 1),transactionList.get(i).getAmount(), 0.0));
+                    }else{
+                        analytic.add(new AnalyticResponse(LocalDate.of(transactionList.get(i).getTransaction_date().getYear() ,
+                                monthSelect , 1),0.0, transactionList.get(i).getAmount()));
+                    }
+                }
+            }
+        }
+        return analytic;
+    }
+
+    private List<AnalyticResponse> yearAnalytics (List<Transaction> transactionList){
+
+        List<AnalyticResponse> analytic = new ArrayList<>();
+
+        if(!transactionList.isEmpty()){
+            //Selección año de comienzo del analytics
+            int yearSelect = transactionList.get(0).getTransaction_date().getYear();
+            analytic.add(new AnalyticResponse(LocalDate.of(yearSelect,1 , 1),0.0, 0.0));
+            for (int i = 0; i<transactionList.size(); i++) {
+                //Si el año seleccionado es igual que el año de la transacción
+                if(yearSelect == transactionList.get(i).getTransaction_date().getYear()){
+                    AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
+                    if(transactionList.get(i).getIncome()){
+                        analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(i).getAmount());
+                    }else{
+                        analyticResponse.setExpense(analyticResponse.getExpense() + transactionList.get(i).getAmount());
+                    }
+                }else{
+                    yearSelect = transactionList.get(i).getTransaction_date().getYear();
+
+                    if (transactionList.get(i).getIncome()){
+                        analytic.add(new AnalyticResponse(LocalDate.of(yearSelect ,
+                                1 , 1),transactionList.get(i).getAmount(), 0.0));
+                    }else{
+                        analytic.add(new AnalyticResponse(LocalDate.of(yearSelect ,
+                                1 , 1),0.0, transactionList.get(i).getAmount()));
+                    }
+                }
+            }
+        }
+        return analytic;
+    }
 
 
 }
