@@ -36,9 +36,15 @@ public class Account {
     @ApiModelProperty("Fecha de última actualización de la cuenta")
     private LocalDate updated_at;
 
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "titular_id")
+    @ApiModelProperty("Titular de la cuenta")
+    private User titularUser;
+
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "accountList",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "ownerAccountList", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
     private List<User> userList;
 
@@ -131,6 +137,14 @@ public class Account {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public User getTitularUser() {
+        return titularUser;
+    }
+
+    public void setTitularUser(User titularUser) {
+        this.titularUser = titularUser;
     }
 
     @Override

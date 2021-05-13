@@ -63,15 +63,21 @@ public class User {
     @ApiModelProperty("Fecha de última actualización del usuario")
     private LocalDate updated_at;
 
+    @OneToMany(mappedBy = "titularUser")
+    @ApiModelProperty("Lista de cuentas en las que es titular el usuario")
+    private List<Account> titularAccountList;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
     @JoinTable(
             name="owners_account",
             joinColumns = {@JoinColumn(name="owner_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name="account_id", referencedColumnName = "id")}
     )
     @ApiModelProperty("Lista de las cuentas en las que el usuario participa")
-    private List<Account> accountList;
+    private List<Account> ownerAccountList;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
@@ -199,12 +205,12 @@ public class User {
         this.updated_at = updated_at;
     }
 
-    public List<Account> getAccountList() {
-        return accountList;
+    public List<Account> getOwnerAccountList() {
+        return ownerAccountList;
     }
 
-    public void setAccountList(List<Account> accountList) {
-        this.accountList = accountList;
+    public void setOwnerAccountList(List<Account> ownerAccountList) {
+        this.ownerAccountList = ownerAccountList;
     }
 
     public List<Card> getCardList() {
@@ -213,6 +219,14 @@ public class User {
 
     public void setCardList(List<Card> cardList) {
         this.cardList = cardList;
+    }
+
+    public List<Account> getTitularAccountList() {
+        return titularAccountList;
+    }
+
+    public void setTitularAccountList(List<Account> titularAccountList) {
+        this.titularAccountList = titularAccountList;
     }
 
     @Override
@@ -231,7 +245,7 @@ public class User {
                 ", country='" + country + '\'' +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
-                ", ownersAccountList=" + accountList +
+                ", ownersAccountList=" + ownerAccountList +
                 ", cardList=" + cardList +
                 '}';
     }

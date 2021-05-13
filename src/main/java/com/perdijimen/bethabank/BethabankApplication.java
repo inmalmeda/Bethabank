@@ -41,19 +41,11 @@ public class BethabankApplication implements CommandLineRunner {
 		List<Transaction> transactionList = createDataTransation();
 		List<Category> categoryList = createDataCategory();
 
-
-		accountList.get(0).setCardList(Arrays.asList(cardList.get(0)));
-		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
-		cardList.get(0).setAccount(accountList.get(0));
-		cardList.get(0).setUser(userList.get(0));
-		cardList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
-		userList.get(0).setCardList(Arrays.asList(cardList.get(0)));
-		transactionList.get(0).setAccount(accountList.get(0));
-		transactionList.get(0).setCategory(categoryList.get(0));
-		transactionList.get(0).setCard(cardList.get(0));
-		categoryList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
-
-		//relationCategoryTransation(categoryList,transactionList);
+		accountList = relationAccount(userList, cardList, transactionList, accountList);
+		cardList = relationCard(userList, cardList, transactionList, accountList);
+		userList = relationUser(userList, cardList, accountList);
+		transactionList = relationTransation(categoryList, transactionList, cardList, accountList);
+		categoryList = relationCategory(categoryList, transactionList);
 
 
 		for (User user: userList) {
@@ -76,39 +68,76 @@ public class BethabankApplication implements CommandLineRunner {
 			transationRepository.save(transaction);
 		}
 
-
-		//cardList.get(1).setAccount(accountList.get(0));
-		//cardList.get(2).setAccount(accountList.get(0));
-
-
-		/*
-		userList = relationUserCard(userList, cardList);
-		 relationCategoryTransation(categoryList,transactionList);
-
-*/
-
-		// accountList.get(0).setCardList(cardList);
-
-/*
-     	 accountList.get(0).setTitularUser(userList.get(0));
-		 accountList.get(1).setTitularUser(userList.get(0));
-
-		 /*
-		 cardList.get(0).setAccount(accountList.get(0));
-		 accountList.get(0).setCardList(Arrays.asList(cardList.get(0)));
-
-		 userList.get(0).setTitularAccountList(Arrays.asList(accountList.get(0)));
-		 userList.get(0).setTitularAccountList(Arrays.asList(accountList.get(1)));
-
-	 */
-
-	/*
-		for (Account account: accountList) {
-			accountRepository.save(account);
-		}
-*/
-
 	}
+
+
+	private List<Account> relationAccount (List<User> userList, List<Card> cardList, List<Transaction> transactionList, List<Account> accounts) {
+		List<Account> accountList = accounts;
+
+		accountList.get(0).setCardList(Arrays.asList(cardList.get(0)));
+		accountList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
+		accountList.get(0).setUserList(Arrays.asList(userList.get(0)));
+		accountList.get(0).setTitularUser(userList.get(0));
+
+		return accountList;
+	}
+
+	private List<Card> relationCard (List<User> userList, List<Card> cards, List<Transaction> transactionList, List<Account> accountList) {
+		List<Card> cardList = cards;
+
+		cardList.get(0).setAccount(accountList.get(0));
+		cardList.get(0).setUser(userList.get(0));
+		cardList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
+
+		return cardList;
+	}
+
+	private List<User> relationUser (List<User> users, List<Card> cards, List<Account> accountList) {
+		List<User> userList = users;
+
+		userList.get(0).setCardList(Arrays.asList(cards.get(0)));
+		userList.get(0).setOwnerAccountList(Arrays.asList(accountList.get(0)));
+
+		return userList;
+	}
+
+	private List<Transaction> relationTransation (List<Category> categoryList, List<Transaction> transations,  List<Card> cards, List<Account> accountList) {
+		List<Transaction> transactionList = transations;
+
+		transactionList.get(0).setAccount(accountList.get(0));
+		transactionList.get(0).setCategory(categoryList.get(0));
+		transactionList.get(0).setCard(cards.get(0));
+
+		return transactionList;
+	}
+
+	private List<Category> relationCategory (List<Category> categories, List<Transaction> transations) {
+		List<Category> categoryList = categories;
+
+		categoryList.get(0).setTransactionList(Arrays.asList(transations.get(0)));
+
+		return categoryList;
+	}
+
+	private List<Account> createDataAccount () {
+		List<Account> accountList = new ArrayList<>();
+
+		accountList.add(new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.now(),LocalDate.now()));
+		accountList.add(new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.now(),LocalDate.now()));
+		accountList.add(new Account("Cuenta ahorro","ES78 45364565465464565465464",50000.00,LocalDate.now(),LocalDate.now()));
+		return accountList;
+	}
+
+	private List<Transaction> createDataTransation () {
+		List<Transaction> transationList = new ArrayList<>();
+
+		transationList.add(new Transaction(200.35,LocalDate.now(),"" , true));
+		transationList.add(new Transaction(150.35,LocalDate.now(),"",true));
+		transationList.add(new Transaction(432.45,LocalDate.now(),"",false));
+
+		return transationList;
+	}
+
 	private List<User> createDataUser () {
 		List<User> userList = new ArrayList<>();
 
@@ -126,19 +155,6 @@ public class BethabankApplication implements CommandLineRunner {
 		return cardList;
 	}
 
-	private List<User> relationUserCard (List<User> userList, List<Card> cardList) {
-		List<Card> cardList1 = Arrays.asList(cardList.get(0) , cardList.get(1));
-		List<Card> cardList2 = Arrays.asList(cardList.get(2));
-
-		userList.get(0).setCardList(cardList1);
-		userList.get(1).setCardList(cardList2);
-
-		cardList.get(0).setUser(userList.get(0));
-		cardList.get(1).setUser(userList.get(0));
-		cardList.get(2).setUser(userList.get(1));
-
-		return Arrays.asList(userList.get(0), userList.get(1));
-	}
 	private List<Category> createDataCategory () {
 		List<Category> categoryList = new ArrayList<>();
 
@@ -148,40 +164,5 @@ public class BethabankApplication implements CommandLineRunner {
 		categoryList.add(new Category("Colegio"));
 
 		return categoryList;
-	}
-
-	private List<Transaction> createDataTransation () {
-		List<Transaction> transationList = new ArrayList<>();
-
-		transationList.add(new Transaction(200.35,LocalDate.now(),"" , true));
-		transationList.add(new Transaction(150.35,LocalDate.now(),"",true));
-		transationList.add(new Transaction(432.45,LocalDate.now(),"",false));
-
-		return transationList;
-	}
-
-	private void relationCategoryTransation (List<Category> categoryList, List<Transaction> transactionList) {
-
-		transactionList.get(0).setCategory(categoryList.get(0));
-		//transactionList.get(1).setCategory(categoryList.get(1));
-		//transactionList.get(2).setCategory(categoryList.get(1));
-
-		categoryList.get(0).setTransactionList(Arrays.asList(transactionList.get(0)));
-		//categoryList.get(1).setTransactionList(Arrays.asList(transactionList.get(1),transactionList.get(2)));
-
-		for (Category category: categoryList) {
-			categoryRepository.save(category);
-		}
-
-		transationRepository.save(transactionList.get(0));
-		//transationRepository.save(transactionList.get(1));
-	}
-
-	private List<Account> createDataAccount () {
-		List<Account> accountList = new ArrayList<>();
-
-		accountList.add(new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.now(),LocalDate.now()));
-		accountList.add(new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.now(),LocalDate.now()));
-		return accountList;
 	}
 }
