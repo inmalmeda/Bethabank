@@ -205,6 +205,14 @@ public class User {
         this.updated_at = updated_at;
     }
 
+    public List<Account> getTitularAccountList() {
+        return titularAccountList;
+    }
+
+    public void setTitularAccountList(List<Account> titularAccountList) {
+        this.titularAccountList = titularAccountList;
+    }
+
     public List<Account> getOwnerAccountList() {
         return ownerAccountList;
     }
@@ -219,14 +227,6 @@ public class User {
 
     public void setCardList(List<Card> cardList) {
         this.cardList = cardList;
-    }
-
-    public List<Account> getTitularAccountList() {
-        return titularAccountList;
-    }
-
-    public void setTitularAccountList(List<Account> titularAccountList) {
-        this.titularAccountList = titularAccountList;
     }
 
     @Override
