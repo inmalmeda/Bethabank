@@ -30,13 +30,9 @@ public class AccountController {
 
     @GetMapping("/accounts")
     public List<Account> userListFilter(@RequestParam(name="id", required = false) Long idUser,
-                                        @RequestParam(name="name", required = false) String name,
                                      @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
                                      @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
 
-        if (idUser != null) {
-            return this.accountService.findAllByName(name, limit, page) ;
-        }
         return this.accountService.findAll(idUser, limit, page);
     }
 

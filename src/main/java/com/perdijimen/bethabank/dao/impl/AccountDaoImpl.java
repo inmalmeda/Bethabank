@@ -4,6 +4,7 @@ import com.perdijimen.bethabank.dao.AccountDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,11 +17,11 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class AccountDaoImpl implements AccountDao {
 
     @PersistenceContext
     private EntityManager manager;
-
 
     @Override
     public Optional<Account> findById(Long id) {
@@ -40,7 +41,7 @@ public class AccountDaoImpl implements AccountDao {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
         Root<Account> root = criteria.from(Account.class);
-        Join<Account, User> rootUser = root.join("user");
+        Join<Account, User> rootUser = root.join("userList");
         criteria.select(root).where(builder.equal(rootUser.get("id"), idUser));
 
         TypedQuery<Account> accountQuery = manager.createQuery(criteria);

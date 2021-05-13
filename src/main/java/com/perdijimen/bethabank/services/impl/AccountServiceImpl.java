@@ -24,10 +24,12 @@ public class AccountServiceImpl implements AccountService {
     private EntityManager manager;
 
     private AccountRepository accountRepository;
+
     private AccountDao accountDAO;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDAO) {
         this.accountRepository = accountRepository;
+        this.accountDAO = accountDAO;
     }
 
     @Override
