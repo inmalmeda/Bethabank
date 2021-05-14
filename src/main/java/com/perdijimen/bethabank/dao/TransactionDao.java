@@ -16,5 +16,7 @@ public interface TransactionDao {
 
     List<Transaction> getAnalyticTransactions (Long idAccount, LocalDate start, LocalDate end);
 
+    List<Transaction> getAnalyticTransactions (Long id, Boolean isAccount, LocalDate start, LocalDate end);
+
     List<Transaction> getAnalyticTransactionsCategory (Long idAccount, LocalDate start);
 }

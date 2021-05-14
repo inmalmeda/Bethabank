@@ -7,6 +7,7 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Category;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
 import com.perdijimen.bethabank.model.response.CategoryAnalytic;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
@@ -19,8 +20,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -87,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
 
         List<Category> categoryList = categoryDao.findAll();
 
-        if(!categoryList.isEmpty()){
+        if(!categoryList.isEmpty() && idAccount != null){
 
             for (Category category: categoryList) {
                 analytic.getCategoryAnalytic().add(new CategoryAnalytic(category.getId(), category.getName(), 0.0));
@@ -115,6 +116,23 @@ public class AccountServiceImpl implements AccountService {
             }
         }
        return analytic;
+    }
+
+    @Override
+    public List<BalanceAnalyticResponse> getAnalyticsBalance(Long id, Boolean type, LocalDate start, LocalDate end) {
+
+        List<BalanceAnalyticResponse> analytic = new ArrayList<>();
+
+        if(id != null && type != null){
+            start = start == null ? LocalDate.now().minusYears(1): start;
+            end = end == null ? LocalDate.now() : end;
+
+            List<Transaction> transactionList = transactionDao.getAnalyticTransactions(id, type, start, end);
+
+            analytic = dateAnalytics(transactionList);
+        }
+
+        return analytic;
     }
 
     @Override
@@ -155,6 +173,54 @@ public class AccountServiceImpl implements AccountService {
             log.warn("Cannot save account: {}, because it doesn´t exist", account);
         }
         return result;
+    }
+
+    private List<BalanceAnalyticResponse> dateAnalytics (List<Transaction> transactionList){
+
+        List<BalanceAnalyticResponse> analytic = new ArrayList<>();
+        double inCome = 0.0;
+        double expenses = 0.0;
+        Long id = 1L;
+
+        if(!transactionList.isEmpty()){
+            //Selección la fecha
+            int daySelect = transactionList.get(0).getTransaction_date().getDayOfMonth();
+            int monthSelect = transactionList.get(0).getTransaction_date().getMonthValue();
+            int yearSelect = transactionList.get(0).getTransaction_date().getYear();
+
+            analytic.add(new BalanceAnalyticResponse(id,LocalDate.of(yearSelect,monthSelect,daySelect),0.0));
+
+            for (Transaction transaction: transactionList) {
+                //Si la fecha seleccionada es igual que la fecha de la transacción
+                if(yearSelect ==  transaction.getTransaction_date().getYear() &&
+                        monthSelect == transaction.getTransaction_date().getMonthValue() &&
+                        daySelect == transaction.getTransaction_date().getDayOfMonth()){
+
+                    if(transaction.getIncome()){
+                        inCome += transaction.getAmount();
+                    }else{
+                        expenses += transaction.getAmount();
+                    }
+
+                }else {
+                    inCome = 0.0;
+                    expenses = 0.0;
+                    daySelect = transaction.getTransaction_date().getDayOfMonth();
+                    monthSelect = transaction.getTransaction_date().getMonthValue();
+                    yearSelect = transaction.getTransaction_date().getYear();
+
+                    analytic.add(new BalanceAnalyticResponse(++id,LocalDate.of(yearSelect,monthSelect,daySelect),0.0));
+                }
+                //Cálculo del balance
+                double total = transaction.getTotal_amount();
+                double subtrac = inCome-expenses;
+
+                Optional<BalanceAnalyticResponse> analitycSelect = analytic.stream()
+                        .filter(c -> Objects.equals(transaction.getTransaction_date(), c.getDate())).findFirst();
+                analitycSelect.get().setBalance(subtrac + total);
+            }
+        }
+        return analytic;
     }
 
     private List<AnalyticResponse> monthAnalytics ( List<Transaction> transactionList){

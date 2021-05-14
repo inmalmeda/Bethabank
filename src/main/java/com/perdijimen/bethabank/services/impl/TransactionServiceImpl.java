@@ -3,7 +3,6 @@ package com.perdijimen.bethabank.services.impl;
 import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Transaction;
-import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
         if(transaction.getId() == null && accountRepository.existsById(idAccount)){
             try{
                 transaction.setTransaction_date(LocalDate.now());
+                transaction.setTransaction_time(LocalTime.now());
                 transactionCreated = transactionRepository.save(transaction);
 
                 if(transactionCreated != null){
@@ -79,9 +80,9 @@ public class TransactionServiceImpl implements TransactionService {
         Optional<Account> accountToUpdate = accountRepository.findById(idAccount);
 
         if (accountToUpdate.isPresent()) {
-            Double total = accountToUpdate.get().getBalance();
+            Double total = accountToUpdate.get().getTotal_amount();
             total = isIncome ? total + amount : total - amount;
-            accountToUpdate.get().setBalance(total);
+            accountToUpdate.get().setTotal_amount(total);
 
             accountService.updateAccount(accountToUpdate.get());
         }

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "transactions")
@@ -25,12 +26,20 @@ public class Transaction {
     private LocalDate transaction_date;
 
     @Column
+    @ApiModelProperty("Hora de la transacción")
+    private LocalTime transaction_time;
+
+    @Column
     @ApiModelProperty("Número de cuenta ajena de la que se recibe el ingreso o a la que se envía la transacción")
     private String accountOut;
 
     @Column
     @ApiModelProperty("Tipo de transacción: Positiva o Negativa")
     private Boolean isIncome;
+
+    @Column
+    @ApiModelProperty("Balance en la cuenta al realizar la transacción")
+    private Double total_amount;
 
     @JsonIgnore
     @ManyToOne()
@@ -54,11 +63,13 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double amount, LocalDate transaction_date, String accountOut, Boolean isIncome) {
+    public Transaction(Double amount, LocalDate transaction_date, LocalTime transaction_time, String accountOut, Boolean isIncome, Double total_amount) {
         this.amount = amount;
         this.transaction_date = transaction_date;
+        this.transaction_time = transaction_time;
         this.accountOut = accountOut;
         this.isIncome = isIncome;
+        this.total_amount = total_amount;
     }
 
     public Long getId() {
@@ -91,6 +102,22 @@ public class Transaction {
 
     public void setAccountOut(String accountOut) {
         this.accountOut = accountOut;
+    }
+
+    public Double getTotal_amount() {
+        return total_amount;
+    }
+
+    public void setTotal_amount(Double total_amount) {
+        this.total_amount = total_amount;
+    }
+
+    public LocalTime getTransaction_time() {
+        return transaction_time;
+    }
+
+    public void setTransaction_time(LocalTime transaction_time) {
+        this.transaction_time = transaction_time;
     }
 
     public Account getAccount() {

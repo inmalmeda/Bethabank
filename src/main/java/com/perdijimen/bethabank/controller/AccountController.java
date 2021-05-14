@@ -4,6 +4,7 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.services.AccountService;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +98,24 @@ public class AccountController {
 
         return  ResponseEntity.ok().body(analyticCategory);
     }
+
+    /**
+     * It returns balance´s analytics of an account
+     * @return Response with analytic of account
+     */
+    @GetMapping("/accounts/balanceAnalytics")
+    @ApiOperation("Genera un análisis del balance de una cuenta o tarjeta")
+    public ResponseEntity<List<BalanceAnalyticResponse>> analyticBalanceAccountOrCard(@RequestParam(name="id") Long id,
+                                                                                @RequestParam(name="type") Boolean type,
+                                                                                @RequestParam(name="start", required = false) LocalDate startDate,
+                                                                                @RequestParam(name="end", required = false) LocalDate endDate)  {
+
+
+       List<BalanceAnalyticResponse> analyticBalanceList = accountService.getAnalyticsBalance(id, type, startDate, endDate);
+
+       return  ResponseEntity.ok().body(analyticBalanceList);
+    }
+
 
     /**
      * It saves an account and returns the account created with id

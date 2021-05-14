@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.dao.impl;
 
 import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.User;
 import org.springframework.stereotype.Repository;
@@ -68,6 +69,28 @@ public class TransactionDaoImpl implements TransactionDao {
         predicates.add(builder.equal(rootAccount.get("id"), idAccount));
         predicates.add(builder.between(root.get("transaction_date"), start, end));
 
+        criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
+        criteria.orderBy(builder.asc(root.get("transaction_date")));
+
+        return manager.createQuery(criteria).getResultList();
+    }
+
+    @Override
+    public List<Transaction> getAnalyticTransactions(Long id, Boolean isAccount, LocalDate start, LocalDate end) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+        Root<Transaction> root = criteria.from(Transaction.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if(isAccount){
+            Join<Transaction, Account> rootAccount= root.join("account");
+            predicates.add(builder.equal(rootAccount.get("id"), id));
+        }else{
+            Join<Transaction, Card> rootCard= root.join("card");
+            predicates.add(builder.equal(rootCard.get("id"), id));
+        }
+
+        predicates.add(builder.between(root.get("transaction_date"), start.minusDays(1), end.plusDays(1)));
         criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
         criteria.orderBy(builder.asc(root.get("transaction_date")));
 

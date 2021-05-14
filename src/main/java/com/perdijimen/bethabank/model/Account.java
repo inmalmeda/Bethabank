@@ -26,7 +26,7 @@ public class Account {
 
     @Column
     @ApiModelProperty("Total de saldo de la cuenta")
-    private Double balance;
+    private Double total_amount;
 
     @Column
     @ApiModelProperty("Fecha de alta de la cuenta")
@@ -41,7 +41,6 @@ public class Account {
     @JoinColumn(name = "titular_id")
     @ApiModelProperty("Titular de la cuenta")
     private User titularUser;
-
 
     @JsonIgnore
     @ManyToMany(mappedBy = "ownerAccountList", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -62,7 +61,7 @@ public class Account {
     public Account(String name, String IBAN, Double balance, LocalDate created_at, LocalDate utdated_at) {
         this.name = name;
         this.IBAN = IBAN;
-        this.balance = balance;
+        this.total_amount = balance;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -91,12 +90,12 @@ public class Account {
         this.IBAN = IBAN;
     }
 
-    public Double getBalance() {
-        return balance;
+    public Double getTotal_amount() {
+        return total_amount;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    public void setTotal_amount(Double total_amount) {
+        this.total_amount = total_amount;
     }
 
     public LocalDate getCreated_at() {
@@ -153,7 +152,7 @@ public class Account {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", IBAN='" + IBAN + '\'' +
-                ", balance=" + balance +
+                ", balance=" + total_amount +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
                 ", titularUser=" + titularUser +

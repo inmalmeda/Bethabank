@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -149,9 +150,12 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Transaction> createDataTransation () {
 		List<Transaction> transationList = new ArrayList<>();
 
-		transationList.add(new Transaction(200.35,LocalDate.of(2021, 5, 1),"" , false));
-		transationList.add(new Transaction(150.35,LocalDate.of(2021, 5, 10),"",false));
-		transationList.add(new Transaction(432.45,LocalDate.of(2021, 5, 12),"",false));
+		transationList.add(new Transaction(500.00,LocalDate.of(2021, 5, 1),
+											LocalTime.of(11, 00, 59), "" , true, -2000.00 ));
+		transationList.add(new Transaction(700.00,LocalDate.of(2021, 5, 1),
+											LocalTime.of(21, 05, 39),"",false, -2700.00));
+		transationList.add(new Transaction(300.00,LocalDate.of(2021, 5, 12),
+											LocalTime.of(9, 15, 19),"",false, 1500.00));
 
 		/*
 		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));
