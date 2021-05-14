@@ -4,6 +4,7 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.services.AccountService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -80,6 +81,19 @@ public class AccountController {
         List<AnalyticResponse> analyticList = accountService.getAnalytics(idAccount, typePeriod);
 
         return  ResponseEntity.ok().body(analyticList);
+    }
+
+    /**
+     * It returns analytics group by categories of an account
+     * @return Response with analytic of account
+     */
+    @GetMapping("/accounts/categoryAnalytics")
+    @ApiOperation("Genera un análisis de una cuenta según sus gastos agrupados en categorías")
+    public ResponseEntity<CategoryAnalyticResponse> analyticCategoryAccount(@RequestParam(name="id") Long idAccount)  {
+
+        CategoryAnalyticResponse analyticCategory = accountService.getAnalyticsCategory(idAccount);
+
+        return  ResponseEntity.ok().body(analyticCategory);
     }
 
     /**

@@ -73,5 +73,23 @@ public class TransactionDaoImpl implements TransactionDao {
 
         return manager.createQuery(criteria).getResultList();
     }
+
+    @Override
+    public List<Transaction> getAnalyticTransactionsCategory(Long idAccount, LocalDate start) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+        Root<Transaction> root = criteria.from(Transaction.class);
+        Join<Transaction, Account> rootAccount= root.join("account");
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(rootAccount.get("id"), idAccount));
+        predicates.add(builder.equal(root.get("isIncome"), false));
+        predicates.add(builder.greaterThan(root.get("transaction_date"), start));
+
+        criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
+        criteria.orderBy(builder.asc(root.get("transaction_date")));
+
+        return manager.createQuery(criteria).getResultList();
+    }
 }
 

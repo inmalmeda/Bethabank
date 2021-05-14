@@ -3,6 +3,7 @@ package com.perdijimen.bethabank.services;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,8 @@ public interface AccountService {
     List<Account> findAll(Long idUser,Integer limit, Integer page);
 
     List<AnalyticResponse> getAnalytics (Long idAccount, Boolean typePeriod);
+
+    CategoryAnalyticResponse getAnalyticsCategory (Long idAccount);
 
     Account createAccount(Account account);
 

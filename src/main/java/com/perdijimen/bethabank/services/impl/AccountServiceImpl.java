@@ -1,10 +1,13 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.AccountDao;
+import com.perdijimen.bethabank.dao.CategoryDao;
 import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Category;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +34,14 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountDao accountDao;
     private TransactionDao transactionDao;
+    private CategoryDao categoryDao;
 
     public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDao,
-                              TransactionDao transactionDao) {
+                              TransactionDao transactionDao, CategoryDao categoryDao) {
         this.accountRepository = accountRepository;
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;
+        this.categoryDao = categoryDao;
     }
 
     @Override
@@ -70,6 +76,34 @@ public class AccountServiceImpl implements AccountService {
             analytic = typePeriod ? monthAnalytics(transactionList) : yearAnalytics(transactionList);
         }
         return analytic;
+    }
+
+    @Override
+    public CategoryAnalyticResponse getAnalyticsCategory(Long idAccount) {
+        int actualMonth = LocalDate.now().getMonthValue();
+        int actualYear =  LocalDate.now().getYear();
+        CategoryAnalyticResponse analytic = new CategoryAnalyticResponse(0.0, new HashMap<>());
+
+        List<Category> categoryList = categoryDao.findAll();
+
+        if(!categoryList.isEmpty()){
+
+            for (Category category: categoryList) {
+                analytic.getCategoryExpenseList().put(category, 0.0);
+            }
+
+            List<Transaction> transactionList = transactionDao.getAnalyticTransactionsCategory(idAccount,
+                    LocalDate.of(actualYear, actualMonth, 1).minusDays(1));
+
+            if(!transactionList.isEmpty()){
+                for (Transaction transaction: transactionList) {
+                    double amountTotalCategory =  analytic.getCategoryExpenseList().get(transaction.getCategory());
+                    analytic.getCategoryExpenseList().put(transaction.getCategory(), amountTotalCategory + transaction.getAmount());
+                    analytic.setTotalExpenses(analytic.getTotalExpenses() + transaction.getAmount());
+                }
+            }
+        }
+       return analytic;
     }
 
     @Override

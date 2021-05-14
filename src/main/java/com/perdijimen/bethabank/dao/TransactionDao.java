@@ -15,4 +15,6 @@ public interface TransactionDao {
     List<Transaction> findAll(Long idAccount,Boolean type, Integer limite, Integer pagina);
 
     List<Transaction> getAnalyticTransactions (Long idAccount, LocalDate start, LocalDate end);
+
+    List<Transaction> getAnalyticTransactionsCategory (Long idAccount, LocalDate start);
 }
