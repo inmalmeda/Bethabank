@@ -149,9 +149,9 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Transaction> createDataTransation () {
 		List<Transaction> transationList = new ArrayList<>();
 
-		transationList.add(new Transaction(200.35,LocalDate.of(2021, 1, 1),"" , true));
+		transationList.add(new Transaction(200.35,LocalDate.of(2021, 1, 1),"" , false));
 		transationList.add(new Transaction(150.35,LocalDate.of(2020, 5, 10),"",true));
-		transationList.add(new Transaction(432.45,LocalDate.of(2021, 2, 12),"",true));
+		transationList.add(new Transaction(432.45,LocalDate.of(2021, 3, 12),"",true));
 
 		/*
 		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));

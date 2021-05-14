@@ -124,13 +124,11 @@ public class AccountServiceImpl implements AccountService {
             for (int i = 0; i<transactionList.size(); i++) {
                 //Si el mes seleccionado es igual que el mes de la transacción
                 if(monthSelect == transactionList.get(i).getTransaction_date().getMonthValue()){
-                    AnalyticResponse analyticResponse = createAnalityc(analytic,transactionList.get(i));
-                   /* AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
                     if(transactionList.get(i).getIncome()){
-                        analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(i).getAmount());
+                        analytic.get(analytic.size()-1).setInCome(analytic.get(analytic.size()-1).getInCome() + transactionList.get(i).getAmount());
                     }else{
-                        analyticResponse.setExpense(analyticResponse.getExpense() + transactionList.get(i).getAmount());
-                    }*/
+                        analytic.get(analytic.size()-1).setExpense(analytic.get(analytic.size()-1).getExpense() + transactionList.get(i).getAmount());
+                    }
                 }else{
                     monthSelect = transactionList.get(i).getTransaction_date().getMonthValue();
 
@@ -158,12 +156,10 @@ public class AccountServiceImpl implements AccountService {
             for (int i = 0; i<transactionList.size(); i++) {
                 //Si el año seleccionado es igual que el año de la transacción
                 if(yearSelect == transactionList.get(i).getTransaction_date().getYear()){
-                   // AnalyticResponse analyticResponse = createAnalityc(analytic,transactionList.get(i));
-                  AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
                     if(transactionList.get(i).getIncome()){
-                        analyticResponse.setInCome(analyticResponse.getInCome() + transactionList.get(i).getAmount());
+                        analytic.get(analytic.size()-1).setInCome(analytic.get(analytic.size()-1).getInCome() + transactionList.get(i).getAmount());
                     }else{
-                        analyticResponse.setExpense(analyticResponse.getExpense() + transactionList.get(i).getAmount());
+                        analytic.get(analytic.size()-1).setExpense(analytic.get(analytic.size()-1).getExpense() + transactionList.get(i).getAmount());
                     }
                 }else{
                     yearSelect = transactionList.get(i).getTransaction_date().getYear();
@@ -180,17 +176,4 @@ public class AccountServiceImpl implements AccountService {
         }
         return analytic;
     }
-
-    private AnalyticResponse createAnalityc (List<AnalyticResponse> analytic, Transaction transaction ){
-        AnalyticResponse analyticResponse =  analytic.get(analytic.size()-1);
-        if(transaction.getIncome()){
-            analyticResponse.setInCome(analyticResponse.getInCome() + transaction.getAmount());
-        }else{
-            analyticResponse.setExpense(analyticResponse.getExpense() + transaction.getAmount());
-        }
-
-        return analyticResponse;
-    }
-
-
 }
