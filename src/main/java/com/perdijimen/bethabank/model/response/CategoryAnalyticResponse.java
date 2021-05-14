@@ -2,20 +2,22 @@ package com.perdijimen.bethabank.model.response;
 
 import com.perdijimen.bethabank.model.Category;
 
+import java.util.List;
 import java.util.Map;
 
 public class CategoryAnalyticResponse {
 
     private Double totalExpenses;
 
-    private Map<Category, Double> categoryExpenseList;
+    private List<CategoryAnalytic> categoryAnalytic;
+
 
     public CategoryAnalyticResponse() {
     }
 
-    public CategoryAnalyticResponse(Double totalExpenses, Map<Category, Double> categoryExpenseList) {
+    public CategoryAnalyticResponse(Double totalExpenses, List<CategoryAnalytic> categoryAnalytic) {
         this.totalExpenses = totalExpenses;
-        this.categoryExpenseList = categoryExpenseList;
+        this.categoryAnalytic = categoryAnalytic;
     }
 
     public Double getTotalExpenses() {
@@ -26,11 +28,11 @@ public class CategoryAnalyticResponse {
         this.totalExpenses = totalExpenses;
     }
 
-    public Map<Category, Double> getCategoryExpenseList() {
-        return categoryExpenseList;
+    public List<CategoryAnalytic> getCategoryAnalytic() {
+        return categoryAnalytic;
     }
 
-    public void setCategoryExpenseList(Map<Category, Double> categoryExpenseList) {
-        this.categoryExpenseList = categoryExpenseList;
+    public void setCategoryAnalytic(List<CategoryAnalytic> categoryAnalytic) {
+        this.categoryAnalytic = categoryAnalytic;
     }
 }

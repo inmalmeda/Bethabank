@@ -7,6 +7,7 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Category;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
+import com.perdijimen.bethabank.model.response.CategoryAnalytic;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -82,14 +83,14 @@ public class AccountServiceImpl implements AccountService {
     public CategoryAnalyticResponse getAnalyticsCategory(Long idAccount) {
         int actualMonth = LocalDate.now().getMonthValue();
         int actualYear =  LocalDate.now().getYear();
-        CategoryAnalyticResponse analytic = new CategoryAnalyticResponse(0.0, new HashMap<>());
+        CategoryAnalyticResponse analytic = new CategoryAnalyticResponse(0.0, new ArrayList<>());
 
         List<Category> categoryList = categoryDao.findAll();
 
         if(!categoryList.isEmpty()){
 
             for (Category category: categoryList) {
-                analytic.getCategoryExpenseList().put(category, 0.0);
+                analytic.getCategoryAnalytic().add(new CategoryAnalytic(category.getId(), category.getName(), 0.0));
             }
 
             List<Transaction> transactionList = transactionDao.getAnalyticTransactionsCategory(idAccount,
@@ -97,8 +98,18 @@ public class AccountServiceImpl implements AccountService {
 
             if(!transactionList.isEmpty()){
                 for (Transaction transaction: transactionList) {
-                    double amountTotalCategory =  analytic.getCategoryExpenseList().get(transaction.getCategory());
-                    analytic.getCategoryExpenseList().put(transaction.getCategory(), amountTotalCategory + transaction.getAmount());
+
+                    Optional<CategoryAnalytic> categorySelect = analytic.getCategoryAnalytic().stream()
+                                                    .filter(c -> transaction.getCategory().getId().equals(c.getIdCategory())).findFirst();
+
+                    double amountTotalCategory =  categorySelect.get().getExpenses();
+
+                    for(int i = 0; i<analytic.getCategoryAnalytic().size(); i++){
+                        if(analytic.getCategoryAnalytic().get(i).getIdCategory() == categorySelect.get().getIdCategory()){
+                            categorySelect.get().setExpenses(transaction.getAmount() + amountTotalCategory);
+                            analytic.getCategoryAnalytic().set(i, categorySelect.get());
+                        }
+                    }
                     analytic.setTotalExpenses(analytic.getTotalExpenses() + transaction.getAmount());
                 }
             }
