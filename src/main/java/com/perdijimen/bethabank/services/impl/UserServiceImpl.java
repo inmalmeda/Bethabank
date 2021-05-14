@@ -1,7 +1,6 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.UserDao;
-import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.UserRepository;

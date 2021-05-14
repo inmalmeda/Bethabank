@@ -39,10 +39,12 @@ public class CardDaoImpl implements CardDao {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Card> criteria = builder.createQuery(Card.class);
         Root<Card> root = criteria.from(Card.class);
-        Join<Card, User> rootUser = root.join("user");
-        criteria.select(root).where(builder.equal(rootUser.get("id"), idUser));
+        if (idUser != null) {
+            Join<Card, User> rootUser = root.join("user");
+            criteria.select(root).where(builder.equal(rootUser.get("id"), idUser));
+        }
 
-       TypedQuery<Card> cardsQuery = manager.createQuery(criteria);
+        TypedQuery<Card> cardsQuery = manager.createQuery(criteria);
 
         if(limit!=null && page!=null){
             cardsQuery.setFirstResult(page);

@@ -33,9 +33,9 @@ public class CardController {
      */
     @GetMapping("/cards")
     @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
-    public ResponseEntity<List<Card>> findAll(@RequestParam(name= "id") Long idUser,
-                                              @RequestParam(name = "page", defaultValue="0") Integer page,
-                                              @RequestParam(name = "limit", defaultValue="5") Integer limit){
+    public ResponseEntity<List<Card>> findAll(@RequestParam(name= "id", required = false) Long idUser,
+                                              @RequestParam(name = "limit", defaultValue="5") Integer limit,
+                                              @RequestParam(name = "page", defaultValue="0") Integer page){
 
         List<Card> cardList = cardService.findAll(idUser, limit, page);
 
