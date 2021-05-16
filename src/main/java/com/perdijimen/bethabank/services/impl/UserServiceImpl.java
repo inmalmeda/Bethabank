@@ -9,8 +9,10 @@ import com.perdijimen.bethabank.services.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Access;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +26,12 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserDao userDao;
+    @Autowired
     private CardService cardService;
 
-    public UserServiceImpl(UserRepository userRepository, UserDao userDao, CardService cardService) {
+    public UserServiceImpl(UserRepository userRepository, UserDao userDao) {
         this.userRepository = userRepository;
         this.userDao = userDao;
-        this.cardService = cardService;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
                         for (Card card : user.getCardList()) {
                             card.setUser(user);
                             userRepository.save(user);
-                            cardService.createCard(card);
+                            //cardService.createCard(card); TODO VERRRRRRRRR
                         }
                     }
 

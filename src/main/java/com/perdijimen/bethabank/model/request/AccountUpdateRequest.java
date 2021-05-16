@@ -13,6 +13,12 @@ public class AccountUpdateRequest {
     public AccountUpdateRequest() {
     }
 
+    public AccountUpdateRequest(Long idAccount, Long idCard, Long idUserToAsociateCard) {
+        this.idAccount = idAccount;
+        this.idCard = idCard;
+        this.idUserToAsociateCard = idUserToAsociateCard;
+    }
+
     public AccountUpdateRequest(Long idAccount, Long idUserOwner, Long idCard, Long idUserToAsociateCard) {
         this.idAccount = idAccount;
         this.idUserOwner = idUserOwner;

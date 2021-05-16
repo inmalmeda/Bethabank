@@ -1,12 +1,19 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.CardDao;
+import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
+import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
+import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.repository.CardRepository;
+import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
+import com.perdijimen.bethabank.services.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -25,6 +32,10 @@ public class CardServiceImpl implements CardService {
 
     private CardRepository cardRepository;
     private CardDao cardDao;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private UserService userService;
 
     public CardServiceImpl(CardRepository cardRepository, CardDao cardDao) {
         this.cardRepository = cardRepository;
@@ -44,41 +55,37 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card createCard(Card card) {
+    public Card createCard(CardRequest card) {
         log.info("createCard");
-
         Card cardCreated = null;
 
-        String cvv = null;
-        String cardNumber = null;
+        Card cardToCreate = new Card(generateNumberCard(), generateCVV(), card.getName_type(), generateExpiratedDate(),
+                LocalDate.now(),LocalDate.now(), generatePassword(card.getPassword()));
 
-        if(card.getId() == null){
+        try{
+           Optional<Account>account = accountService.findById(card.getIdAccount());
+            Optional<User> user = Optional.empty();
 
-            for(int i = 0 ; i<4 ; i++){
-                cvv += (int)Math.floor(Math.random()*9);
+            for (User userSearched: account.get().getUserList()) {
+                if(userSearched.getId() == card.getIdUser()){
+                    user = userService.findById(card.getIdUser());
+                }
             }
-            card.setCVV(cvv);
 
-            for(int i = 0 ; i<16 ; i++){
-                cardNumber += (int)Math.floor(Math.random()*9);
+            if(account.isPresent() && user.isPresent()){
+                account.get().getCardList().add(cardToCreate);
+                user.get().getCardList().add(cardToCreate);
+                cardToCreate.setAccount(account.get());
+                cardToCreate.setUser(user.get());
+                cardCreated = cardRepository.save(cardToCreate);
+                userService.updateUser(user.get());
+                accountService.updateAccount(new AccountUpdateRequest(card.getIdAccount(), cardCreated.getId(), card.getIdUser()));
+
+            }else{
+                log.error("Cannot save the card: {} , error : {}", card);
             }
-            card.setCard_number(cardNumber);
-
-            String md5HexPassword = DigestUtils.md5Hex(card.getPassword()).toUpperCase();
-            card.setPassword(md5HexPassword);
-
-            String md5HexCvv = DigestUtils.md5Hex(card.getCVV()).toUpperCase();
-            card.setCVV(md5HexCvv);
-
-            try{
-                card.setCreated_at(LocalDate.now());
-                card.setUpdated_at(LocalDate.now());
-                cardCreated = cardRepository.save(card);
-            }catch(Exception e) {
-                log.error("Cannot save the card: {} , error : {}", card, e);
-            }
-        }else{
-            log.warn("Creating card with id");
+        }catch(Exception e) {
+            log.error("Cannot save the card: {} , error : {}", card, e);
         }
 
         return cardCreated;
@@ -102,4 +109,33 @@ public class CardServiceImpl implements CardService {
         }
         return result;
     }
+
+    private String generateNumberCard(){
+        String cardNumber = "";
+        for(int i = 0 ; i<16 ; i++){
+            cardNumber += (int)Math.floor(Math.random()*9);
+        }
+        return cardNumber;
+    }
+
+
+    private String generateCVV(){
+        String cvv = "";
+        for(int i = 0 ; i<4 ; i++){
+            cvv += (int)Math.floor(Math.random()*9);
+        }
+
+        String md5HexCvv = DigestUtils.md5Hex(cvv).toUpperCase();
+
+        return cvv;
+    }
+
+    private LocalDate generateExpiratedDate (){
+        return LocalDate.now().plusYears(10);
+    }
+
+    private String generatePassword (String password){
+        return  DigestUtils.md5Hex(password).toUpperCase();
+    }
+
 }

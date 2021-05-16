@@ -1,6 +1,7 @@
 package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.Card;
+import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.services.CardService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,9 +34,13 @@ public class CardController {
      */
     @GetMapping("/cards")
     @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
-    public ResponseEntity<List<Card>> findAll(@RequestParam(name= "id", required = false) Long idUser,
-                                              @RequestParam(name = "limit", defaultValue="5") Integer limit,
-                                              @RequestParam(name = "page", defaultValue="0") Integer page){
+    public ResponseEntity<List<Card>> findAll(
+            @ApiParam("Id del usuario para buscar las tarjetas")
+            @RequestParam(name= "id", required = false) Long idUser,
+            @ApiParam("Número de tarjetas que se quieren recuperar")
+            @RequestParam(name = "limit", defaultValue="5") Integer limit,
+            @ApiParam("Número de registro en el que empieza la búsqueda")
+            @RequestParam(name = "page", defaultValue="0") Integer page){
 
         List<Card> cardList = cardService.findAll(idUser, limit, page);
 
@@ -53,7 +58,9 @@ public class CardController {
      */
     @GetMapping("/cards/{id}")
     @ApiOperation("Encuentra una tarjeta por su id")
-    public  ResponseEntity<Optional<Card>>findOne(@ApiParam("Clave primaria de la tarjeta") @PathVariable Long id) {
+    public  ResponseEntity<Optional<Card>>findOne(
+            @ApiParam("Clave primaria de la tarjeta")
+            @PathVariable Long id) {
 
         Optional<Card> card = cardService.findById(id);
 
@@ -64,18 +71,18 @@ public class CardController {
         }
     }
 
-
     /**
      * It saves a card and returns the card created with id
-     * @param card New card
+     * @param cardRequest New card
      * @return Card created
      */
     @PostMapping("/cards")
     @ApiOperation("Guarda en base de datos una tarjeta nueva")
-    public ResponseEntity<Card> createCard(@ApiParam("Objeto tarjeta nueva")
-                                                 @RequestBody Card card) throws URISyntaxException {
+    public ResponseEntity<Card> createCard(
+            @ApiParam("Objeto tarjeta nueva")
+            @RequestBody CardRequest cardRequest) throws URISyntaxException {
 
-        Card cardDB = cardService.createCard(card);
+        Card cardDB = cardService.createCard(cardRequest);
 
         return cardDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                 ResponseEntity.created(new URI("/api/cards/" + cardDB.getId())).body(cardDB);

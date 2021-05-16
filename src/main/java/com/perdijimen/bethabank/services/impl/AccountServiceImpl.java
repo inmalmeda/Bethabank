@@ -16,6 +16,7 @@ import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -34,14 +35,14 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     private AccountDao accountDao;
+    @Autowired
     private UserService userService;
+    @Autowired
     private CardService cardService;
 
-    public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDao, UserService userService, CardService cardService) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDao) {
         this.accountRepository = accountRepository;
         this.accountDao = accountDao;
-        this.userService = userService;
-        this.cardService = cardService;
     }
 
     @Override
