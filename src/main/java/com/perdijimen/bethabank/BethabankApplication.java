@@ -211,6 +211,7 @@ public class BethabankApplication implements CommandLineRunner {
 		categoryList.add(new Category("Textil"));
 		categoryList.add(new Category("Comercio"));
 		categoryList.add(new Category("Restaurante"));
+		categoryList.add(new Category("Otros"));
 
 		return categoryList;
 	}

@@ -2,13 +2,19 @@ package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Card;
+import com.perdijimen.bethabank.model.Category;
 import com.perdijimen.bethabank.model.Transaction;
+import com.perdijimen.bethabank.model.request.TransactionRequest;
 import com.perdijimen.bethabank.repository.AccountRepository;
+import com.perdijimen.bethabank.repository.CategoryRepository;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
+import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -28,13 +34,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     private TransactionRepository transactionRepository;
     private AccountService accountService;
-    private AccountRepository accountRepository;
     private TransactionDao transactionDao;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private CardService cardService;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, AccountService accountService, AccountRepository accountRepository, TransactionDao transactionDao) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, AccountService accountService,
+                                  TransactionDao transactionDao) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
-        this.accountRepository = accountRepository;
         this.transactionDao = transactionDao;
     }
 
@@ -50,42 +59,79 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction createTransaction(Transaction transaction, Long idAccount) {
+    public Transaction createTransaction(TransactionRequest transaction) {
         log.info("createTransaction");
 
         Transaction transactionCreated = null;
 
-        if(transaction.getId() == null && accountRepository.existsById(idAccount)){
-            try{
-                transaction.setTransaction_date(LocalDate.now());
-                transaction.setTransaction_time(LocalTime.now());
-                transactionCreated = transactionRepository.save(transaction);
+        if(transaction.getIdAccount()!=null){
+            Optional<Account> account = accountService.findById(transaction.getIdAccount());
 
-                if(transactionCreated != null){
-                    manageBalanceAccount(idAccount, transaction.getAmount(), transaction.getIncome());
+            if(account.isPresent()){
+                Double totalAmountActual = manageAmountTotalAccount(account, transaction.getAmount(),transaction.getIncome());
+                Transaction transactionToCreate = new Transaction(transaction.getAmount(), LocalDate.now(),
+                        LocalTime.now(),transaction.getAccountOut(),transaction.getIncome(), totalAmountActual);
+                try{
+                    account.get().getTransactionList().add(transactionToCreate);
+                    transactionToCreate.setAccount(account.get());
+
+                    //Si el movimiento se ha hecho con una cuenta
+                    if(transaction.getIdCard()!=null){
+                        Optional<Card> card = Optional.empty();
+
+                        //Comprobar que la tarjeta pertenece a la cuenta
+                        for (Card cardSearched: account.get().getCardList()) {
+                            if(cardSearched.getId() == transaction.getIdCard()){
+                                card = cardService.findById(transaction.getIdCard());
+                            }
+                        }
+                        if(card.isPresent()){
+                            card.get().getTransactionList().add(transactionToCreate);
+                            transactionToCreate.setCard(card.get());
+                            cardService.updateCardObject(card.get());
+                        }
+                    }
+
+                    //Se le añade la categoría a la transacción
+                    Optional<Category> category = Optional.empty();
+
+                    if(transaction.getIdCategory() != null){
+                    category = categoryRepository.findById(transaction.getIdCategory());
+                    }else{
+                    category = categoryRepository.findByName("Otros");
+                    }
+
+                    transactionToCreate.setCategory(category.get());
+                    category.get().getTransactionList().add(transactionToCreate);
+                    categoryRepository.save(category.get());
+
+                    accountService.updateAccountObject(account.get());
+                    transactionCreated = transactionRepository.save(transactionToCreate);
+
+                }catch(Exception e) {
+                    log.error("Cannot save the transaction: {} , error : {}", transaction, e);
                 }
 
-            }catch(Exception e) {
-                log.error("Cannot save the transaction: {} , error : {}", transaction, e);
+            }else{
+                log.warn("Account doesn´t exist");
             }
-        }else{
-            log.warn("Creating transaction with id");
         }
 
         return transactionCreated;
     }
 
-    private void manageBalanceAccount(Long idAccount, Double amount, boolean isIncome){
-
-        Optional<Account> accountToUpdate = accountRepository.findById(idAccount);
+    private double manageAmountTotalAccount(Optional<Account> accountToUpdate, Double amount, boolean isIncome){
+        Double total = 0.0;
 
         if (accountToUpdate.isPresent()) {
-            Double total = accountToUpdate.get().getTotal_amount();
+            total = accountToUpdate.get().getTotal_amount();
             total = isIncome ? total + amount : total - amount;
             accountToUpdate.get().setTotal_amount(total);
 
-            accountService.updateAmountTotalAccount(accountToUpdate.get());
+            accountService.updateAccountObject(accountToUpdate.get());
         }
+
+        return total;
     }
 
 }

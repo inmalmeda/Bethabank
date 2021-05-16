@@ -17,5 +17,5 @@ public interface AccountService {
 
     Account updateAccount(AccountUpdateRequest account);
 
-    Account updateAmountTotalAccount(Account account);
+    Account updateAccountObject(Account account);
 }

@@ -149,7 +149,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account updateAmountTotalAccount(Account account) {
+    public Account updateAccountObject(Account account) {
         log.info("updateAccount");
 
         Account result = null;
