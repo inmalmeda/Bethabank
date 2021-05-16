@@ -48,7 +48,9 @@ public class CardServiceImpl implements CardService {
         log.info("createCard");
 
         Card cardCreated = null;
+
         String cvv = null;
+        String cardNumber = null;
 
         if(card.getId() == null){
 
@@ -56,6 +58,11 @@ public class CardServiceImpl implements CardService {
                 cvv += (int)Math.floor(Math.random()*9);
             }
             card.setCVV(cvv);
+
+            for(int i = 0 ; i<16 ; i++){
+                cardNumber += (int)Math.floor(Math.random()*9);
+            }
+            card.setCard_number(cardNumber);
 
             String md5HexPassword = DigestUtils.md5Hex(card.getPassword()).toUpperCase();
             card.setPassword(md5HexPassword);
