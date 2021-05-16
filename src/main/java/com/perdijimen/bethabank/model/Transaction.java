@@ -159,8 +159,10 @@ public class Transaction {
                 "id=" + id +
                 ", amount=" + amount +
                 ", transaction_date=" + transaction_date +
+                ", transaction_time=" + transaction_time +
                 ", accountOut='" + accountOut + '\'' +
                 ", isIncome=" + isIncome +
+                ", total_amount=" + total_amount +
                 '}';
     }
 }
