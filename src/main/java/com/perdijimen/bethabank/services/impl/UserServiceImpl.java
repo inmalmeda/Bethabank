@@ -64,14 +64,6 @@ public class UserServiceImpl implements UserService {
                 user.setPassword(md5Hex);
 
                 try {
-                    if (user.getCardList() != null) {
-                        for (Card card : user.getCardList()) {
-                            card.setUser(user);
-                            userRepository.save(user);
-                            //cardService.createCard(card); TODO VERRRRRRRRR
-                        }
-                    }
-
                     user.setCreated_at(LocalDate.now());
                     user.setUpdated_at(LocalDate.now());
                     userCreated = userRepository.save(user);
@@ -81,8 +73,6 @@ public class UserServiceImpl implements UserService {
             } else {
                 log.warn("Creating user with id");
             }
-
-
         return userCreated;
     }
 

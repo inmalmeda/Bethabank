@@ -96,15 +96,14 @@ public class TransactionServiceImpl implements TransactionService {
                     Optional<Category> category = Optional.empty();
 
                     if(transaction.getIdCategory() != null){
-                    category = categoryRepository.findById(transaction.getIdCategory());
+                        category = categoryRepository.findById(transaction.getIdCategory());
                     }else{
-                    category = categoryRepository.findByName("Otros");
+                        category = categoryRepository.findByName("Otros");
                     }
 
                     transactionToCreate.setCategory(category.get());
                     category.get().getTransactionList().add(transactionToCreate);
                     categoryRepository.save(category.get());
-
                     accountService.updateAccountObject(account.get());
                     transactionCreated = transactionRepository.save(transactionToCreate);
 

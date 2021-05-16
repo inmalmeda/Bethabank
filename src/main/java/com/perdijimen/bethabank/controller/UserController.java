@@ -22,15 +22,18 @@ public class UserController {
 
     private final UserService userService;
 
-
     public UserController(UserService userService){
         this.userService = userService;
     }
 
     @GetMapping("/users")
-    public List<User> userListFilter(@RequestParam(name="name", required = false) String name,
-                                     @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
-                                     @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
+    public List<User> userListFilter(
+            @ApiParam("Filtro por nombre de usuario")
+            @RequestParam(name="name", required = false) String name,
+            @ApiParam("Número de usuarios que se quieren recuperar")
+            @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
+            @ApiParam("Número de registro en el que empieza la búsqueda")
+            @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
 
         if (name != null) {
             return this.userService.findAllByName(name, limit, page) ;
@@ -39,7 +42,9 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public Optional<User> userFilterById(@PathVariable Long id)  {
+    public Optional<User> userFilterById(
+            @ApiParam("Id del usuario buscado")
+            @PathVariable Long id)  {
 
         return this.userService.findById(id);
     }
@@ -51,8 +56,9 @@ public class UserController {
      */
     @PostMapping("/users")
     @ApiOperation("Guarda en base de datos un usuario nuevo")
-    public ResponseEntity<User> createUser(@ApiParam("Objeto usuario nuevo")
-                                 @RequestBody User user) throws URISyntaxException {
+    public ResponseEntity<User> createUser(
+            @ApiParam("Objeto usuario nuevo")
+            @RequestBody User user) throws URISyntaxException {
 
         User userDB = userService.createUser(user);
 
