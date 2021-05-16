@@ -16,12 +16,6 @@ public interface AccountService {
 
     List<Account> findAll(Long idUser,Integer limit, Integer page);
 
-    List<AnalyticResponse> getAnalytics (Long idAccount, Boolean typePeriod);
-
-    CategoryAnalyticResponse getAnalyticsCategory (Long idAccount);
-
-    List<BalanceAnalyticResponse> getAnalyticsBalance (Long id, Boolean type, LocalDate start, LocalDate end);
-
     Account createAccount(Account account);
 
     Account updateAccount(Account account);

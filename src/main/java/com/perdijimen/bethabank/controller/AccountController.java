@@ -7,6 +7,7 @@ import com.perdijimen.bethabank.model.response.AnalyticResponse;
 import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.services.AccountService;
+import com.perdijimen.bethabank.services.AnalyticService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,11 @@ import java.util.Optional;
 public class AccountController {
 
     private AccountService accountService;
+    private AnalyticService analyticService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, AnalyticService analyticService) {
         this.accountService = accountService;
+        this.analyticService = analyticService;
     }
 
     /**
@@ -51,7 +54,6 @@ public class AccountController {
         }else{
             return  ResponseEntity.ok().body(accountList);
         }
-
     }
 
     /**
@@ -81,7 +83,7 @@ public class AccountController {
     public ResponseEntity<List<AnalyticResponse>> analyticAccount(@RequestParam(name="id") Long idAccount,
                                                             @RequestParam(name="typePeriod", defaultValue = "1") Boolean typePeriod)  {
 
-        List<AnalyticResponse> analyticList = accountService.getAnalytics(idAccount, typePeriod);
+        List<AnalyticResponse> analyticList = analyticService.getAnalytics(idAccount, typePeriod);
 
         return  ResponseEntity.ok().body(analyticList);
     }
@@ -94,7 +96,7 @@ public class AccountController {
     @ApiOperation("Genera un análisis de una cuenta según sus gastos agrupados en categorías")
     public ResponseEntity<CategoryAnalyticResponse> analyticCategoryAccount(@RequestParam(name="id") Long idAccount)  {
 
-        CategoryAnalyticResponse analyticCategory = accountService.getAnalyticsCategory(idAccount);
+        CategoryAnalyticResponse analyticCategory = analyticService.getAnalyticsCategory(idAccount);
 
         return  ResponseEntity.ok().body(analyticCategory);
     }
@@ -111,7 +113,7 @@ public class AccountController {
                                                                                 @RequestParam(name="end", required = false) LocalDate endDate)  {
 
 
-       List<BalanceAnalyticResponse> analyticBalanceList = accountService.getAnalyticsBalance(id, type, startDate, endDate);
+       List<BalanceAnalyticResponse> analyticBalanceList = analyticService.getAnalyticsBalance(id, type, startDate, endDate);
 
        return  ResponseEntity.ok().body(analyticBalanceList);
     }
