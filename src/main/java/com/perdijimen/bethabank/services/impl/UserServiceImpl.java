@@ -77,21 +77,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(User userToUpdate) {
         log.info("updateUser");
-
         User result = null;
 
-        if (userRepository.existsById(user.getId())) {
-            try{
-                user.setUpdated_at(LocalDate.now());
-                result = userRepository.save(user);
-            }catch(Exception e){
-                log.error("Cannot save user: {} , error : {}", user, e);
-            }
+        Optional<User>user = findById(userToUpdate.getId());
+
+        if(user.isPresent()){
+                try{
+                    userToUpdate.setCardList(user.get().getCardList());
+                    userToUpdate.setTitularAccountList(user.get().getTitularAccountList());
+                    userToUpdate.setOwnerAccountList(user.get().getOwnerAccountList());
+                    userToUpdate.setUpdated_at(LocalDate.now());
+                    result = userRepository.save(userToUpdate);
+                }catch(Exception e){
+                    log.error("Cannot save user: {} , error : {}", userToUpdate, e);
+                }
         }else{
-            log.warn("Cannot save user: {}, because it doesn´t exist", user);
+            log.warn("Cannot save user: {}, because it doesn´t exist", userToUpdate);
         }
+
+
         return result;
     }
 
