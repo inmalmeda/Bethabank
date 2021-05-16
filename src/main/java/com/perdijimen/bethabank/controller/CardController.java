@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.request.CardRequest;
+import com.perdijimen.bethabank.model.request.CardUpdateRequest;
 import com.perdijimen.bethabank.services.CardService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -95,7 +95,9 @@ public class CardController {
      */
     @PutMapping("/cards")
     @ApiOperation("Actualiza en base de datos una tarjeta existente")
-    public ResponseEntity<Card> updateCard(@ApiParam("Información de la cuenta") @RequestBody Card card) {
+    public ResponseEntity<Card> updateCard(
+            @ApiParam("Información de la cuenta")
+            @RequestBody CardUpdateRequest card) {
 
         Card cardDB = cardService.updateCard(card);
 

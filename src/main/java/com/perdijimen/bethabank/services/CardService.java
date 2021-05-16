@@ -2,6 +2,7 @@ package com.perdijimen.bethabank.services;
 
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.request.CardRequest;
+import com.perdijimen.bethabank.model.request.CardUpdateRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,7 @@ public interface CardService {
 
     Card createCard(CardRequest card);
 
-    Card updateCard(Card card);
+    Card updateCard(CardUpdateRequest card);
+
+    Card updateCardObject(Card card);
 }

@@ -1,15 +1,9 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.AccountDao;
-import com.perdijimen.bethabank.dao.CategoryDao;
-import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.*;
 import com.perdijimen.bethabank.model.request.AccountRequest;
 import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
-import com.perdijimen.bethabank.model.response.AnalyticResponse;
-import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
-import com.perdijimen.bethabank.model.response.CategoryAnalytic;
-import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
@@ -136,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
                             cardToAccount.get().setUser(userToCard.get());
                             userToCard.get().getCardList().add(cardToAccount.get());
                             userService.updateUser(userToCard.get());
-                            cardService.updateCard(cardToAccount.get());
+                            cardService.updateCardObject(cardToAccount.get());
                         }
                     }
                 }

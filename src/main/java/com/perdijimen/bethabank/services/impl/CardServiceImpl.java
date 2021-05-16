@@ -6,6 +6,7 @@ import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.model.request.CardRequest;
+import com.perdijimen.bethabank.model.request.CardUpdateRequest;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
@@ -63,7 +64,7 @@ public class CardServiceImpl implements CardService {
                 LocalDate.now(),LocalDate.now(), generatePassword(card.getPassword()));
 
         try{
-           Optional<Account>account = accountService.findById(card.getIdAccount());
+            Optional<Account>account = accountService.findById(card.getIdAccount());
             Optional<User> user = Optional.empty();
 
             for (User userSearched: account.get().getUserList()) {
@@ -92,7 +93,36 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card updateCard(Card card) {
+    public Card updateCard(CardUpdateRequest card) {
+        log.info("updateCard");
+        Card result = null;
+
+        Optional<Card> cardToUpdate = cardRepository.findById(card.getIdCard());
+
+        if(cardToUpdate.isPresent()){
+            try{
+                if(card.getPassword() != null){
+                    cardToUpdate.get().setPassword(generatePassword(card.getPassword()));
+                }
+
+                if(card.getExpiration_date()){
+                    cardToUpdate.get().setExpiration_date(generateExpiratedDate());
+                }
+
+                cardToUpdate.get().setUpdated_at(LocalDate.now());
+                result = cardRepository.save(cardToUpdate.get());
+            } catch(Exception e){
+                log.error("Cannot save card: {} , error : {}", card, e);
+            }
+        }else{
+            log.warn("Cannot save card: {}, because it doesn´t exist", card);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Card updateCardObject(Card card) {
         log.info("updateCard");
 
         Card result = null;
@@ -125,9 +155,7 @@ public class CardServiceImpl implements CardService {
             cvv += (int)Math.floor(Math.random()*9);
         }
 
-        String md5HexCvv = DigestUtils.md5Hex(cvv).toUpperCase();
-
-        return cvv;
+        return DigestUtils.md5Hex(cvv).toUpperCase();
     }
 
     private LocalDate generateExpiratedDate (){
