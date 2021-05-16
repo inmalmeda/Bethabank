@@ -3,6 +3,8 @@ package com.perdijimen.bethabank.services.impl;
 import com.perdijimen.bethabank.dao.AccountDao;
 import com.perdijimen.bethabank.dao.CategoryDao;
 import com.perdijimen.bethabank.dao.TransactionDao;
+import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Category;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
@@ -10,7 +12,10 @@ import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
 import com.perdijimen.bethabank.model.response.CategoryAnalytic;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
+import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.AnalyticService;
+import com.perdijimen.bethabank.services.CardService;
+import com.perdijimen.bethabank.services.UserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,12 +30,14 @@ public class AnalyticServiceImpl implements AnalyticService {
     private AccountDao accountDao;
     private TransactionDao transactionDao;
     private CategoryDao categoryDao;
+    private AccountService accountService;
 
-    public AnalyticServiceImpl( AccountDao accountDao,
-                              TransactionDao transactionDao, CategoryDao categoryDao) {
+    public AnalyticServiceImpl( AccountDao accountDao, TransactionDao transactionDao,
+                                CategoryDao categoryDao, AccountService accountService) {
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;
         this.categoryDao = categoryDao;
+        this.accountService = accountService;
     }
 
 
@@ -97,16 +104,26 @@ public class AnalyticServiceImpl implements AnalyticService {
     }
 
     @Override
-    public List<BalanceAnalyticResponse> getAnalyticsBalance(Long id, Boolean type, LocalDate start, LocalDate end) {
+    public List<BalanceAnalyticResponse> getAnalyticsBalance(Long id, Long idUser, Boolean type, LocalDate start, LocalDate end) {
         List<BalanceAnalyticResponse> analytic = new ArrayList<>();
 
-        if(id != null && type != null){
+        if(type != null){
             start = start == null ? LocalDate.now().minusYears(1): start;
             end = end == null ? LocalDate.now() : end;
 
-            List<Transaction> transactionList = transactionDao.getAnalyticTransactions(id, type, start, end);
+            if(id !=null || idUser != null){
+                List<Transaction> transactionList = new ArrayList<>();
 
-            analytic = dateAnalytics(transactionList);
+                if(id != null){
+                    transactionList = transactionDao.getAnalyticTransactions(id, type, start, end);
+                }else{
+                    List<Account> accountList = accountService.findAll(idUser,20,0);
+                    transactionList = transactionDao.getAnalyticTransactionsUser(accountList, start, end);
+                }
+
+                analytic = dateAnalytics(transactionList);
+            }
+
         }
 
         return analytic;

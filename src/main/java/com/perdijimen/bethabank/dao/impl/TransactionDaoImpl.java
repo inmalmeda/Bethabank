@@ -4,7 +4,6 @@ import com.perdijimen.bethabank.dao.TransactionDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Transaction;
-import com.perdijimen.bethabank.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,16 +11,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class TransactionDaoImpl implements TransactionDao {
 
     @PersistenceContext
     private EntityManager manager;
-
 
     @Override
     public Optional<Transaction> findById(Long id) {
@@ -95,6 +91,37 @@ public class TransactionDaoImpl implements TransactionDao {
         criteria.orderBy(builder.asc(root.get("transaction_date")));
 
         return manager.createQuery(criteria).getResultList();
+    }
+
+    @Override
+    public List<Transaction> getAnalyticTransactionsUser(List<Account> accountList, LocalDate start, LocalDate end) {
+
+        List<Transaction> transactionList = new ArrayList<>();
+
+        if(!accountList.isEmpty()){
+
+            for (Account account: accountList) {
+                CriteriaBuilder builder = manager.getCriteriaBuilder();
+                CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+                Root<Transaction> root = criteria.from(Transaction.class);
+                List<Predicate> predicates = new ArrayList<>();
+                Join<Transaction, Account> rootAccount= root.join("account");
+                predicates.add(builder.equal(rootAccount.get("id"), account.getId()));
+                predicates.add(builder.between(root.get("transaction_date"), start.minusDays(1), end.plusDays(1)));
+                criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
+                criteria.orderBy(builder.asc(root.get("transaction_date")));
+
+                List<Transaction> transactions = manager.createQuery(criteria).getResultList();
+
+                for (Transaction transaction: transactions ) {
+                    transactionList.add(transaction);
+                }
+            }
+        }
+
+        Collections.sort(transactionList, Comparator.comparing(Transaction::getTransaction_date));
+
+       return transactionList;
     }
 
     @Override

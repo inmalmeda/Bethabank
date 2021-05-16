@@ -4,7 +4,6 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.request.AccountRequest;
 import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

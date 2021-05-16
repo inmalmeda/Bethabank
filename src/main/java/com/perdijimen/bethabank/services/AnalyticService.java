@@ -13,5 +13,5 @@ public interface AnalyticService {
 
     CategoryAnalyticResponse getAnalyticsCategory (Long idAccount);
 
-    List<BalanceAnalyticResponse> getAnalyticsBalance (Long id, Boolean type, LocalDate start, LocalDate end);
+    List<BalanceAnalyticResponse> getAnalyticsBalance (Long id, Long idUser, Boolean type, LocalDate start, LocalDate end);
 }

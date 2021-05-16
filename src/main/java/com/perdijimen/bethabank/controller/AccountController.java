@@ -65,14 +65,16 @@ public class AccountController {
      */
     @GetMapping("/accounts/{id}")
     @ApiOperation("Encuentra una cuenta por su id")
-    public ResponseEntity<Optional<Account>> findOne(@PathVariable Long id)  {
+    public ResponseEntity<Optional<Account>> findOne(
+            @ApiParam("Id de la cuenta que se quiere recuperar")
+            @PathVariable Long id)  {
 
         Optional<Account> account = accountService.findById(id);
 
-        if(account == null){
+        if(!account.isPresent()){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }else{
-            return  ResponseEntity.ok().body(account);
+            return ResponseEntity.ok().body(account);
         }
     }
 
@@ -82,8 +84,11 @@ public class AccountController {
      */
     @GetMapping("/accounts/analytics")
     @ApiOperation("Genera un análisis de una cuenta según sus gastos e ingresos")
-    public ResponseEntity<List<AnalyticResponse>> analyticAccount(@RequestParam(name="id") Long idAccount,
-                                                            @RequestParam(name="typePeriod", defaultValue = "1") Boolean typePeriod)  {
+    public ResponseEntity<List<AnalyticResponse>> analyticAccount(
+            @ApiParam("Id de la cuenta para hacer el análisis")
+            @RequestParam(name="id") Long idAccount,
+            @ApiParam("Tipo de periodo-> False: Año, True: Mes")
+            @RequestParam(name="typePeriod", defaultValue = "1") Boolean typePeriod)  {
 
         List<AnalyticResponse> analyticList = analyticService.getAnalytics(idAccount, typePeriod);
 
@@ -96,7 +101,9 @@ public class AccountController {
      */
     @GetMapping("/accounts/categoryAnalytics")
     @ApiOperation("Genera un análisis de una cuenta según sus gastos agrupados en categorías")
-    public ResponseEntity<CategoryAnalyticResponse> analyticCategoryAccount(@RequestParam(name="id") Long idAccount)  {
+    public ResponseEntity<CategoryAnalyticResponse> analyticCategoryAccount(
+            @ApiParam("Id de la cuenta para hacer el análisis del mes por categoría")
+            @RequestParam(name="id") Long idAccount)  {
 
         CategoryAnalyticResponse analyticCategory = analyticService.getAnalyticsCategory(idAccount);
 
@@ -109,13 +116,19 @@ public class AccountController {
      */
     @GetMapping("/accounts/balanceAnalytics")
     @ApiOperation("Genera un análisis del balance de una cuenta o tarjeta")
-    public ResponseEntity<List<BalanceAnalyticResponse>> analyticBalanceAccountOrCard(@RequestParam(name="id") Long id,
-                                                                                @RequestParam(name="type") Boolean type,
-                                                                                @RequestParam(name="start", required = false) LocalDate startDate,
-                                                                                @RequestParam(name="end", required = false) LocalDate endDate)  {
+    public ResponseEntity<List<BalanceAnalyticResponse>> analyticBalanceAccountOrCard(
+            @ApiParam("Id de la cuenta para hacer el análisis del balance, si es nulo se hará el balance de todas las cuentas")
+            @RequestParam(name="id", required = false) Long id,
+            @ApiParam("Id del usuario para hacer el análisis de todas las cuentas")
+            @RequestParam(name="iduser", required = false) Long idUser,
+            @ApiParam("Tipo de balance-> True: Cuenta, False: Tarjeta")
+            @RequestParam(name="type") Boolean type,
+            @ApiParam("Fecha de inicio del análisis")
+            @RequestParam(name="start", required = false) LocalDate startDate,
+            @ApiParam("Fecha de inicio del final")
+            @RequestParam(name="end", required = false) LocalDate endDate)  {
 
-
-       List<BalanceAnalyticResponse> analyticBalanceList = analyticService.getAnalyticsBalance(id, type, startDate, endDate);
+       List<BalanceAnalyticResponse> analyticBalanceList = analyticService.getAnalyticsBalance(id, idUser, type, startDate, endDate);
 
        return  ResponseEntity.ok().body(analyticBalanceList);
     }
@@ -128,8 +141,9 @@ public class AccountController {
      */
     @PostMapping("/accounts")
     @ApiOperation("Guarda en base de datos una cuenta nueva")
-    public ResponseEntity<Account> createAccount(@ApiParam("Objeto cuenta nueva")
-                                           @RequestBody AccountRequest accountRequest) throws URISyntaxException {
+    public ResponseEntity<Account> createAccount(
+            @ApiParam("Objeto de solicitud de cuenta nueva")
+            @RequestBody AccountRequest accountRequest) throws URISyntaxException {
 
         Account accountDB = accountService.createAccount(accountRequest);
 
@@ -144,7 +158,9 @@ public class AccountController {
      */
     @PutMapping("/accounts")
     @ApiOperation("Actualiza en base de datos una cuenta existente")
-    public ResponseEntity<Account> updateAccount(@ApiParam("Información de la cuenta") @RequestBody AccountUpdateRequest accountRequest) {
+    public ResponseEntity<Account> updateAccount(
+            @ApiParam("Información para actualizar la cuenta")
+            @RequestBody AccountUpdateRequest accountRequest) {
 
         Account accountDB = accountService.updateAccount(accountRequest);
 
