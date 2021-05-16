@@ -22,7 +22,8 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController (UserService userService){
+
+    public UserController(UserService userService){
         this.userService = userService;
     }
 
@@ -54,7 +55,6 @@ public class UserController {
                                  @RequestBody User user) throws URISyntaxException {
 
         User userDB = userService.createUser(user);
-
 
         return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                                     ResponseEntity.created(new URI("/api/users/" + userDB.getId())).body(userDB);

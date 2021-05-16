@@ -4,6 +4,7 @@ import com.perdijimen.bethabank.dao.CardDao;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.services.CardService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,21 @@ public class CardServiceImpl implements CardService {
         log.info("createCard");
 
         Card cardCreated = null;
+        String cvv = null;
 
         if(card.getId() == null){
+
+            for(int i = 0 ; i<4 ; i++){
+                cvv += (int)Math.floor(Math.random()*9);
+            }
+            card.setCVV(cvv);
+
+            String md5HexPassword = DigestUtils.md5Hex(card.getPassword()).toUpperCase();
+            card.setPassword(md5HexPassword);
+
+            String md5HexCvv = DigestUtils.md5Hex(card.getCVV()).toUpperCase();
+            card.setCVV(md5HexCvv);
+
             try{
                 card.setCreated_at(LocalDate.now());
                 card.setUpdated_at(LocalDate.now());

@@ -6,6 +6,7 @@ import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.UserRepository;
 import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -52,12 +53,14 @@ public class UserServiceImpl implements UserService {
 
         User userCreated = null;
 
-        if(user.getId() == null && user.getEmail() == null && user.getDNI() == null) {
+        Optional<User> userEmail = userRepository.findByEmail(Optional.ofNullable(user.getEmail()));
+        Optional<User> userDNI = userRepository.findByDNI(user.getDNI());
 
-            List<User> userEmail = userRepository.findByEmail(user.getEmail());
-            List<User> userDNI = userRepository.findByDNI(user.getDNI());
+        if(user.getId() == null || userEmail.isPresent() || userDNI.isPresent()) {
 
-            if (!userEmail.isEmpty() && !userDNI.isEmpty()) {
+                String md5Hex = DigestUtils.md5Hex(user.getPassword()).toUpperCase();
+                user.setPassword(md5Hex);
+
                 try {
                     if (user.getCardList() != null) {
                         for (Card card : user.getCardList()) {
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 log.warn("Creating user with id");
             }
 
-        }
+
         return userCreated;
     }
 

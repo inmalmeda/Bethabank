@@ -1,7 +1,7 @@
 package com.perdijimen.bethabank.services.impl;
 
-import com.perdijimen.bethabank.model.UserRegister;
-import com.perdijimen.bethabank.repository.UserRegisterRepository;
+import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UserDetailsRegisterServiceImpl implements UserDetailsService {
 
     @Autowired
-    UserRegisterRepository userRegisterRepository;
+    UserRepository userRepository;
     // Implementacion de metodos
 
     @Override
@@ -24,11 +24,11 @@ public class UserDetailsRegisterServiceImpl implements UserDetailsService {
         // se utiliza para poner los tipos de roles que tendra el usuario
         // el codificador de la contraseña es dentro de {} poner noop
 
-        UserRegister user = userRegisterRepository.findByEmail(Optional.ofNullable(email))
+        User user = userRepository.findByEmail(Optional.ofNullable(email))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " +  email));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), "{noop}" + user.getPassword() ,new ArrayList<>());
+                user.getName(), "{noop}" + user.getPassword() ,new ArrayList<>());
 
     }
 }
