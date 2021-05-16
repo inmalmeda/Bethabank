@@ -1,8 +1,8 @@
 package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.Card;
-import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.request.AccountRequest;
+import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.model.response.AnalyticResponse;
 import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,9 +41,13 @@ public class AccountController {
      */
     @GetMapping("/accounts")
     @ApiOperation("Encuentra todas las cuentas con filtro de id de usuario y paginación")
-    public ResponseEntity<List<Account>> findAll(@RequestParam(name="id", required = false) Long idUser,
-                                     @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
-                                     @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
+    public ResponseEntity<List<Account>> findAll(
+            @ApiParam("Id del usuario de todas las cuentas que se quieren recuperar")
+            @RequestParam(name="id", required = false) Long idUser,
+            @ApiParam("Cantidad de cuentas que se quieren recuperar")
+            @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
+            @ApiParam("Número de registro en el que empieza la búsqueda")
+            @RequestParam(name="page", required = false, defaultValue = "0") Integer page)  {
 
         List<Account> accountList = accountService.findAll(idUser, limit, page);
 
@@ -121,15 +123,15 @@ public class AccountController {
 
     /**
      * It saves an account and returns the account created with id
-     * @param account New account
+     * @param accountRequest New account
      * @return Account created
      */
     @PostMapping("/accounts")
     @ApiOperation("Guarda en base de datos una cuenta nueva")
     public ResponseEntity<Account> createAccount(@ApiParam("Objeto cuenta nueva")
-                                           @RequestBody Account account) throws URISyntaxException {
+                                           @RequestBody AccountRequest accountRequest) throws URISyntaxException {
 
-        Account accountDB = accountService.createAccount(account);
+        Account accountDB = accountService.createAccount(accountRequest);
 
         return accountDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                 ResponseEntity.created(new URI("/api/accounts/" + accountDB.getId())).body(accountDB);
@@ -137,14 +139,14 @@ public class AccountController {
 
     /**
      * It updates an account
-     * @param account Account to update
+     * @param accountRequest Account to update
      * @return Response of update account
      */
     @PutMapping("/accounts")
     @ApiOperation("Actualiza en base de datos una cuenta existente")
-    public ResponseEntity<Account> updateAccount(@ApiParam("Información de la cuenta") @RequestBody Account account) {
+    public ResponseEntity<Account> updateAccount(@ApiParam("Información de la cuenta") @RequestBody AccountUpdateRequest accountRequest) {
 
-        Account accountDB = accountService.updateAccount(account);
+        Account accountDB = accountService.updateAccount(accountRequest);
 
         return accountDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok().body(accountDB);

@@ -58,7 +58,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String name, String IBAN, Double balance, LocalDate created_at, LocalDate utdated_at) {
+    public Account(String name, String IBAN, Double balance, LocalDate created_at, LocalDate updated_at) {
         this.name = name;
         this.IBAN = IBAN;
         this.total_amount = balance;

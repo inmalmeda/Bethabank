@@ -1,10 +1,8 @@
 package com.perdijimen.bethabank.services;
 
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.User;
-import com.perdijimen.bethabank.model.response.AnalyticResponse;
-import com.perdijimen.bethabank.model.response.BalanceAnalyticResponse;
-import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
+import com.perdijimen.bethabank.model.request.AccountRequest;
+import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +14,9 @@ public interface AccountService {
 
     List<Account> findAll(Long idUser,Integer limit, Integer page);
 
-    Account createAccount(Account account);
+    Account createAccount(AccountRequest account);
 
-    Account updateAccount(Account account);
+    Account updateAccount(AccountUpdateRequest account);
+
+    Account updateAmountTotalAccount(Account account);
 }

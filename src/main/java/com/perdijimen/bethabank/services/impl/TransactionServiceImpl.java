@@ -84,7 +84,7 @@ public class TransactionServiceImpl implements TransactionService {
             total = isIncome ? total + amount : total - amount;
             accountToUpdate.get().setTotal_amount(total);
 
-            accountService.updateAccount(accountToUpdate.get());
+            accountService.updateAmountTotalAccount(accountToUpdate.get());
         }
     }
 

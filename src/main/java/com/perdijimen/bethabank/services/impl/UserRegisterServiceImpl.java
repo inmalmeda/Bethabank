@@ -30,7 +30,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         if (ObjectUtils.isEmpty(user))
             return null;
 
-
         Optional<String> email = Optional.ofNullable(user.getEmail());
         Optional<UserRegister> emailDB = userRegisterRepository.findByEmail(email);
         Optional<Object> db = emailDB.map(a -> {
@@ -40,8 +39,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
         String md5Hex = DigestUtils.md5Hex(user.getPassword()).toUpperCase();
         user.setPassword(md5Hex);
-        System.out.println("~~~~~~~~~~$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  DB " + db  ) ;
-        System.out.println("~~~~~~~~~~$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ USER "  + email) ;
 
         if (email.equals(db))  {
             return null;

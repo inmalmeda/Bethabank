@@ -174,6 +174,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		userList.add(new User("Inma","Jimenez",LocalDate.now(),"", "inma@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
 		userList.add(new User("Miguel","Perdiguero",LocalDate.now(),"", "miguel@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
+		userList.add(new User("Patri","Almeda",LocalDate.now(),"", "patri@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
 		return userList;
 	}
 
@@ -183,6 +184,8 @@ public class BethabankApplication implements CommandLineRunner {
 		cardList.add( new Card("34534534353453","333","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"2233"));
 		cardList.add( new Card("43535435345435","232","debit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4455"));
 		cardList.add( new Card("43535435345400","282","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4400"));
+		cardList.add( new Card("43535435345401","281","credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),"4400"));
+
 
 		return cardList;
 	}

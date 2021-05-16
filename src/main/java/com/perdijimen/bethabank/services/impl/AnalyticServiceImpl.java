@@ -11,6 +11,7 @@ import com.perdijimen.bethabank.model.response.CategoryAnalytic;
 import com.perdijimen.bethabank.model.response.CategoryAnalyticResponse;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AnalyticService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Service
 public class AnalyticServiceImpl implements AnalyticService {
 
     private AccountDao accountDao;
