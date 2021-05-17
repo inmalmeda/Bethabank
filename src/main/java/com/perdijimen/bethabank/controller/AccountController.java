@@ -43,7 +43,7 @@ public class AccountController {
     @ApiOperation("Encuentra todas las cuentas con filtro de id de usuario y paginación")
     public ResponseEntity<List<Account>> findAll(
             @ApiParam("Id del usuario de todas las cuentas que se quieren recuperar")
-            @RequestParam(name="id", required = false) Long idUser,
+            @RequestParam(name="id") Long idUser,
             @ApiParam("Cantidad de cuentas que se quieren recuperar")
             @RequestParam(name="limit", required = false, defaultValue = "5") Integer limit,
             @ApiParam("Número de registro en el que empieza la búsqueda")

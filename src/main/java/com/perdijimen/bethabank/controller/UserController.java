@@ -73,7 +73,9 @@ public class UserController {
      */
     @PutMapping("/users")
     @ApiOperation("Actualiza en base de datos un usuario existente")
-    public ResponseEntity<User> updateUser(@ApiParam("Información del usuario") @RequestBody User user) {
+    public ResponseEntity<User> updateUser(
+            @ApiParam("Información del usuario")
+            @RequestBody User user) {
 
         User userDB = userService.updateUser(user);
 

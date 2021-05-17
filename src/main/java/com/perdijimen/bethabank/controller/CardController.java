@@ -36,7 +36,7 @@ public class CardController {
     @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
     public ResponseEntity<List<Card>> findAll(
             @ApiParam("Id del usuario para buscar las tarjetas")
-            @RequestParam(name= "id", required = false) Long idUser,
+            @RequestParam(name= "id") Long idUser,
             @ApiParam("Número de tarjetas que se quieren recuperar")
             @RequestParam(name = "limit", defaultValue="5") Integer limit,
             @ApiParam("Número de registro en el que empieza la búsqueda")
