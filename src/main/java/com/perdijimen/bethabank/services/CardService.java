@@ -18,4 +18,6 @@ public interface CardService {
     Card updateCard(CardUpdateRequest card);
 
     Card updateCardObject(Card card);
+
+    boolean deleteCardById(Long id);
 }

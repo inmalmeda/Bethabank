@@ -63,14 +63,12 @@ public class User {
     @ApiModelProperty("Fecha de última actualización del usuario")
     private LocalDate updated_at;
 
-    @OneToMany(mappedBy = "titularUser")
+    @OneToMany(mappedBy = "titularUser", cascade = CascadeType.ALL)
     @ApiModelProperty("Lista de cuentas en las que es titular el usuario")
     private List<Account> titularAccountList;
 
-
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.REFRESH})
     @JoinTable(
             name="owners_account",
             joinColumns = {@JoinColumn(name="owner_id", referencedColumnName = "id")},
@@ -79,7 +77,7 @@ public class User {
     @ApiModelProperty("Lista de las cuentas en las que el usuario participa")
     private List<Account> ownerAccountList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ApiModelProperty("Lista de las tarjetas que pertenecen al usuario")
     private List<Card> cardList;
 

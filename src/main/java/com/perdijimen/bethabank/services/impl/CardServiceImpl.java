@@ -3,11 +3,13 @@ package com.perdijimen.bethabank.services.impl;
 import com.perdijimen.bethabank.dao.CardDao;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
+import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.model.request.CardUpdateRequest;
 import com.perdijimen.bethabank.repository.CardRepository;
+import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.UserService;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +41,8 @@ public class CardServiceImpl implements CardService {
     private AccountService accountService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public CardServiceImpl(CardRepository cardRepository, CardDao cardDao) {
         this.cardRepository = cardRepository;
@@ -138,6 +144,43 @@ public class CardServiceImpl implements CardService {
             log.warn("Cannot save card: {}, because it doesn´t exist", card);
         }
         return result;
+    }
+
+    @Override
+    public boolean deleteCardById(Long id) {
+        log.debug("Delete a card by id: {}", id);
+
+        Card cardToDelete = manager.find(Card.class, id);
+        if (cardToDelete != null) {
+            try{
+                List<Transaction> transactionToDelete = cardToDelete.getTransactionList();
+                for(Transaction tran : transactionToDelete){
+                    tran.setCard(null);
+                    transactionRepository.save(tran);
+                }
+
+                Account account = manager.find(Account.class, cardToDelete.getAccount().getId());
+                List<Card> cardListForAccount = new ArrayList<>();
+                for (Card card:  account.getCardList() ) {
+                    if(card.getId() != id){
+                        cardListForAccount.add(card);
+                    }
+                }
+                account.setCardList(cardListForAccount);
+                accountService.updateAccountObject(account);
+
+                cardRepository.deleteById(id);
+
+            }catch(Exception e){
+                log.error("Cannot delete card with id {}", id, "*********" , e);
+                return false;
+            }
+        }else {
+            log.error("Doesn´t exist card with id {}", id);
+            return false;
+        }
+
+        return true;
     }
 
     private String generateNumberCard(){

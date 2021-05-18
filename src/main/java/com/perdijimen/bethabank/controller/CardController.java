@@ -104,4 +104,27 @@ public class CardController {
         return cardDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok().body(cardDB);
     }
+
+    /**
+     * It deletes one card by id
+     * @param id id of card
+     * @return Response of delete
+     */
+    @DeleteMapping("/cards/{id}")
+    @ApiOperation("Borra de base de datos una tarjeta según su id")
+    public ResponseEntity deleteCard(@ApiParam("Id de la tarjeta")
+                              @PathVariable Long id) {
+
+        if(id!=null){
+
+            if(cardService.deleteCardById(id)){
+                return new ResponseEntity(HttpStatus.OK);
+            }else{
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
+        }else{
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

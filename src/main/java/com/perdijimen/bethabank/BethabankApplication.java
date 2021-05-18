@@ -185,17 +185,14 @@ public class BethabankApplication implements CommandLineRunner {
 		String passwordCard1 = DigestUtils.md5Hex("2233");
 		String passwordCard2 = DigestUtils.md5Hex("4455");
 		String passwordCard3 = DigestUtils.md5Hex("4400");
-		String passwordCard4 = DigestUtils.md5Hex("4500");
 
 		String cvv1 = DigestUtils.md5Hex("333");
 		String cvv2 = DigestUtils.md5Hex("232");
 		String cvv3 = DigestUtils.md5Hex("282");
-		String cvv4 = DigestUtils.md5Hex("281");
 
 		cardList.add( new Card("34534534353453",cvv1,"credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),passwordCard1));
 		cardList.add( new Card("43535435345435",cvv2,"debit",LocalDate.now(),LocalDate.now(),LocalDate.now(),passwordCard2));
 		cardList.add( new Card("43535435345400",cvv3,"credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),passwordCard3));
-		cardList.add( new Card("43535435345401",cvv4,"credit",LocalDate.now(),LocalDate.now(),LocalDate.now(),passwordCard4));
 
 
 		return cardList;

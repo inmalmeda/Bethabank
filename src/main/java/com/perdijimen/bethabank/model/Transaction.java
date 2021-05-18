@@ -42,19 +42,19 @@ public class Transaction {
     private Double total_amount;
 
     @JsonIgnore
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "account_id")
     @ApiModelProperty("Cuenta con la que se realiza la transacción")
     private Account account;
 
    @JsonIgnore
-   @ManyToOne()
+   @ManyToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "category_id")
    @ApiModelProperty("Categoría a la que pertenece la transacción")
    private Category category;
 
    @JsonIgnore
-   @ManyToOne()
+   @ManyToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "card_id")
    @ApiModelProperty("Tarjeta con la que se realiza la transacción, puede ser de valor nulo")
    private Card card;
