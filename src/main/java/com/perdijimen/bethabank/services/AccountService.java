@@ -18,4 +18,7 @@ public interface AccountService {
     Account updateAccount(AccountUpdateRequest account);
 
     Account updateAccountObject(Account account);
+
+    boolean deleteAccountById(Long id);
+
 }

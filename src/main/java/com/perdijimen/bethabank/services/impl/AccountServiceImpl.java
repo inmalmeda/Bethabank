@@ -7,6 +7,7 @@ import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.repository.AccountRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
+import com.perdijimen.bethabank.services.TransactionService;
 import com.perdijimen.bethabank.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -33,6 +35,9 @@ public class AccountServiceImpl implements AccountService {
     private UserService userService;
     @Autowired
     private CardService cardService;
+    @Autowired
+    private TransactionService transactionService;
+
 
     public AccountServiceImpl(AccountRepository accountRepository, AccountDao accountDao) {
         this.accountRepository = accountRepository;
@@ -165,6 +170,47 @@ public class AccountServiceImpl implements AccountService {
             log.warn("Cannot save account: {}, because it doesn´t exist", account);
         }
         return result;
+    }
+
+    @Override
+    public boolean deleteAccountById(Long id) {
+        log.debug("Delete an account by id: {}", id);
+
+        Account accountToDelete = manager.find(Account.class, id);
+        if (accountToDelete != null) {
+            try{
+
+                for (Card card: accountToDelete.getCardList()) {
+                    cardService.deleteCardById(card.getId());
+                }
+
+                for(Transaction tran : accountToDelete.getTransactionList()){
+                    transactionService.deleteTransactionById(tran.getId());
+                }
+
+                for(User user: accountToDelete.getUserList()){
+                    List<Account> accountList = new ArrayList<>();
+                    for(Account account: user.getOwnerAccountList()){
+                        if(account.getId() != id){
+                            accountList.add(account);
+                        }
+                    }
+                    user.setOwnerAccountList(accountList);
+                    userService.updateUser(user);
+                }
+
+                accountRepository.deleteById(id);
+
+            }catch(Exception e){
+                log.error("Cannot delete account with id {}", id);
+                return false;
+            }
+        }else {
+            log.error("Doesn´t exist account with id {}", id);
+            return false;
+        }
+
+        return true;
     }
 
     private String createIBAN (){

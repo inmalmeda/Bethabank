@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,8 +40,6 @@ public class CardServiceImpl implements CardService {
     private AccountService accountService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private TransactionRepository transactionRepository;
     @Autowired
     private TransactionService transactionService;
 
@@ -162,7 +158,7 @@ public class CardServiceImpl implements CardService {
                 cardRepository.deleteById(id);
 
             }catch(Exception e){
-                log.error("Cannot delete card with id {}", id, "*********" , e);
+                log.error("Cannot delete card with id {}", id);
                 return false;
             }
         }else {
