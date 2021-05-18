@@ -14,4 +14,6 @@ public interface TransactionService {
     List<Transaction> findAll(Long idAccount, Boolean type, Integer limit, Integer page);
 
     Transaction createTransaction(TransactionRequest transactionRequest);
+
+   boolean deleteTransactionById(Long id);
 }

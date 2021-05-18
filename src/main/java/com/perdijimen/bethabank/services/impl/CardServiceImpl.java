@@ -12,6 +12,7 @@ import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
+import com.perdijimen.bethabank.services.TransactionService;
 import com.perdijimen.bethabank.services.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class CardServiceImpl implements CardService {
     private UserService userService;
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private TransactionService transactionService;
 
     public CardServiceImpl(CardRepository cardRepository, CardDao cardDao) {
         this.cardRepository = cardRepository;
@@ -153,22 +156,9 @@ public class CardServiceImpl implements CardService {
         Card cardToDelete = manager.find(Card.class, id);
         if (cardToDelete != null) {
             try{
-                List<Transaction> transactionToDelete = cardToDelete.getTransactionList();
-                for(Transaction tran : transactionToDelete){
-                    tran.setCard(null);
-                    transactionRepository.save(tran);
+                for(Transaction tran : cardToDelete.getTransactionList()){
+                    transactionService.deleteTransactionById(tran.getId());
                 }
-
-                Account account = manager.find(Account.class, cardToDelete.getAccount().getId());
-                List<Card> cardListForAccount = new ArrayList<>();
-                for (Card card:  account.getCardList() ) {
-                    if(card.getId() != id){
-                        cardListForAccount.add(card);
-                    }
-                }
-                account.setCardList(cardListForAccount);
-                accountService.updateAccountObject(account);
-
                 cardRepository.deleteById(id);
 
             }catch(Exception e){

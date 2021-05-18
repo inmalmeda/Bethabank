@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,6 +119,29 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionCreated;
     }
+
+    @Override
+    public boolean deleteTransactionById(Long id) {
+        log.debug("Delete a transaction by id: {}", id);
+
+        Transaction transactionToDelete = manager.find(Transaction.class, id);
+        if (transactionToDelete != null) {
+            try{
+               transactionRepository.deleteById(id);
+
+            }catch(Exception e){
+                log.error("Cannot delete transaction with id {}", id, "*********" , e);
+                return false;
+            }
+        }else {
+            log.error("Doesn´t exist transaction with id {}", id);
+            return false;
+        }
+        return true;
+    }
+
+
+
 
     private double manageAmountTotalAccount(Optional<Account> accountToUpdate, Double amount, boolean isIncome){
         Double total = 0.0;
