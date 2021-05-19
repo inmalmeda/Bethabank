@@ -82,4 +82,27 @@ public class UserController {
         return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                             ResponseEntity.ok().body(userDB);
     }
+
+    /**
+     * It deletes one user by id
+     * @param id id of user
+     * @return Response of delete
+     */
+    @DeleteMapping("/users/{id}")
+    @ApiOperation("Borra de base de datos un usuario según su id")
+    public ResponseEntity deleteUser(@ApiParam("Id del usuario")
+                                        @PathVariable Long id) {
+
+        if(id!=null){
+
+            if(userService.deleteUserById(id)){
+                return new ResponseEntity(HttpStatus.OK);
+            }else{
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
+        }else{
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

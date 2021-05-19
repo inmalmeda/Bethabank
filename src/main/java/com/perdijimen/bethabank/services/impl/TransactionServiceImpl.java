@@ -130,7 +130,7 @@ public class TransactionServiceImpl implements TransactionService {
                transactionRepository.deleteById(id);
 
             }catch(Exception e){
-                log.error("Cannot delete transaction with id {}", id, "*********" , e);
+                log.error("Cannot delete transaction with id {}", id);
                 return false;
             }
         }else {

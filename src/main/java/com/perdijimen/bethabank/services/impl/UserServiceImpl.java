@@ -1,9 +1,12 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.UserDao;
+import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
+import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.repository.UserRepository;
+import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
 import com.perdijimen.bethabank.services.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -13,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Access;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +29,16 @@ public class UserServiceImpl implements UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    @PersistenceContext
+    private EntityManager manager;
 
     private UserRepository userRepository;
     private UserDao userDao;
+
     @Autowired
     private CardService cardService;
+    @Autowired
+    private AccountService accountService;
 
     public UserServiceImpl(UserRepository userRepository, UserDao userDao) {
         this.userRepository = userRepository;
@@ -99,6 +110,47 @@ public class UserServiceImpl implements UserService {
 
 
         return result;
+    }
+
+    @Override
+    public boolean deleteUserById(Long id) {
+        log.debug("Delete an user by id: {}", id);
+
+        User userToDelete = manager.find(User.class, id);
+
+        if (userToDelete != null) {
+            try{
+
+                for (Account account : userToDelete.getOwnerAccountList()) {
+                    List <User> userList = new ArrayList<>();
+                    for (User user: account.getUserList()) {
+                        if (user.getId() != id){
+                            userList.add(user);
+                        }
+                    }
+                    account.setUserList(userList);
+                    accountService.updateAccountObject(account);
+                }
+
+                for(Account account : userToDelete.getTitularAccountList()){
+                    accountService.deleteAccountById(account.getId());
+                }
+
+              /*  for (Card card : userToDelete.getCardList()) {
+                    cardService.deleteCardById(card.getId());
+                }*/
+
+                userRepository.deleteById(id);
+
+            }catch(Exception e){
+                log.error("Cannot delete user with id {}", id);
+                return false;
+            }
+        }else {
+            log.error("Doesn´t exist user with id {}", id);
+            return false;
+        }
+        return true;
     }
 
 }

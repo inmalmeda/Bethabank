@@ -175,7 +175,7 @@ public class AccountController {
      */
     @DeleteMapping("/accounts/{id}")
     @ApiOperation("Borra de base de datos una cuenta según su id")
-    public ResponseEntity deleteCard(@ApiParam("Id de la cuenta")
+    public ResponseEntity deleteAccount(@ApiParam("Id de la cuenta")
                                      @PathVariable Long id) {
 
         if(id!=null){
