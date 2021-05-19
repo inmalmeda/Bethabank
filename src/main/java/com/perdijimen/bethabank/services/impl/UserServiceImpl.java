@@ -136,10 +136,6 @@ public class UserServiceImpl implements UserService {
                     accountService.deleteAccountById(account.getId());
                 }
 
-              /*  for (Card card : userToDelete.getCardList()) {
-                    cardService.deleteCardById(card.getId());
-                }*/
-
                 userRepository.deleteById(id);
 
             }catch(Exception e){
