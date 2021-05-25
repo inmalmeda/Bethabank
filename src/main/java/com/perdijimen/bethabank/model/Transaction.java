@@ -41,6 +41,10 @@ public class Transaction {
     @ApiModelProperty("Balance en la cuenta al realizar la transacción")
     private Double total_amount;
 
+    @Column
+    @ApiModelProperty("Concepto de la transacción")
+    private String description;
+
     @ManyToOne()
     @JoinColumn(name = "account_id")
     @ApiModelProperty("Cuenta con la que se realiza la transacción")
@@ -62,13 +66,15 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Double amount, LocalDate transaction_date, LocalTime transaction_time, String accountOut, Boolean isIncome, Double total_amount) {
+    public Transaction(Long id, Double amount, LocalDate transaction_date, LocalTime transaction_time, String accountOut, Boolean isIncome, Double total_amount, String description) {
+        this.id = id;
         this.amount = amount;
         this.transaction_date = transaction_date;
         this.transaction_time = transaction_time;
         this.accountOut = accountOut;
         this.isIncome = isIncome;
         this.total_amount = total_amount;
+        this.description = description;
     }
 
     public Long getId() {
@@ -117,6 +123,14 @@ public class Transaction {
 
     public void setTransaction_time(LocalTime transaction_time) {
         this.transaction_time = transaction_time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Account getAccount() {
