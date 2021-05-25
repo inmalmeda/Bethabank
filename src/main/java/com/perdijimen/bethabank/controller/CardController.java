@@ -20,6 +20,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 public class CardController {
 
     private CardService cardService;
@@ -38,7 +39,7 @@ public class CardController {
             @ApiParam("Id del usuario para buscar las tarjetas")
             @RequestParam(name= "id") Long idUser,
             @ApiParam("Número de tarjetas que se quieren recuperar")
-            @RequestParam(name = "limit", defaultValue="5") Integer limit,
+            @RequestParam(name = "limit", defaultValue="3") Integer limit,
             @ApiParam("Número de registro en el que empieza la búsqueda")
             @RequestParam(name = "page", defaultValue="0") Integer page){
 

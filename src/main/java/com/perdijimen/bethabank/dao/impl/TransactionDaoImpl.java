@@ -40,7 +40,10 @@ public class TransactionDaoImpl implements TransactionDao {
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(rootAccount.get("id"), idAccount));
-        predicates.add(builder.equal(root.get("isIncome"), type));
+
+        if(type!=null){
+            predicates.add(builder.equal(root.get("isIncome"), type));
+        }
 
         criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
 

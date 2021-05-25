@@ -19,6 +19,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 public class TransactionController {
 
     private TransactionService transactionService;
@@ -28,14 +29,14 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
+    @ApiOperation("Encuentra todos los movimientos con filtro de id de usuario y paginación")
     public ResponseEntity<List<Transaction>> findAll(
             @ApiParam("Id del usuario para buscar sus movimientos")
             @RequestParam(name= "id") Long idUser,
             @ApiParam("Tipo de movimiento-> False: Gastos y True:Ingresos")
-            @RequestParam(name= "isIncome") Boolean isIncome,
+            @RequestParam(name= "isIncome", required = false) Boolean isIncome,
             @ApiParam("Número de movimientos que se quieren recuperar")
-            @RequestParam(name = "limit", defaultValue="5") Integer limit,
+            @RequestParam(name = "limit", defaultValue="7") Integer limit,
             @ApiParam("Número de registro en el que empieza la búsqueda")
             @RequestParam(name = "page", defaultValue="0") Integer page ) {
 
