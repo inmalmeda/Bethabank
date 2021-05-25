@@ -66,8 +66,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Long id, Double amount, LocalDate transaction_date, LocalTime transaction_time, String accountOut, Boolean isIncome, Double total_amount, String description) {
-        this.id = id;
+    public Transaction( Double amount, LocalDate transaction_date, LocalTime transaction_time, String accountOut, Boolean isIncome, Double total_amount, String description) {
         this.amount = amount;
         this.transaction_date = transaction_date;
         this.transaction_time = transaction_time;

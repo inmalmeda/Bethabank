@@ -12,6 +12,8 @@ public class TransactionRequest {
 
     private String accountOut;
 
+    private String description;
+
     private Boolean income;
 
     private Long idCategory;
@@ -20,11 +22,12 @@ public class TransactionRequest {
     public TransactionRequest() {
     }
 
-    public TransactionRequest(Long idAccount, Long idCard, Double amount, String accountOut, Boolean income, Long idCategory) {
+    public TransactionRequest(Long idAccount, Long idCard, Double amount, String accountOut, String description, Boolean income, Long idCategory) {
         this.idAccount = idAccount;
         this.idCard = idCard;
         this.amount = amount;
         this.accountOut = accountOut;
+        this.description = description;
         this.income = income;
         this.idCategory = idCategory;
     }
@@ -75,5 +78,13 @@ public class TransactionRequest {
 
     public void setIdCategory(Long idCategory) {
         this.idCategory = idCategory;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

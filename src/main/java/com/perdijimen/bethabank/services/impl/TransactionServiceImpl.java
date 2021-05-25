@@ -71,7 +71,8 @@ public class TransactionServiceImpl implements TransactionService {
             if(account.isPresent()){
                 Double totalAmountActual = manageAmountTotalAccount(account, transaction.getAmount(),transaction.getIncome());
                 Transaction transactionToCreate = new Transaction(transaction.getAmount(), LocalDate.now(),
-                        LocalTime.now(),transaction.getAccountOut(),transaction.getIncome(), totalAmountActual);
+                        LocalTime.now(),transaction.getAccountOut(),transaction.getIncome(), totalAmountActual, transaction.getDescription());
+
                 try{
                     account.get().getTransactionList().add(transactionToCreate);
                     transactionToCreate.setAccount(account.get());
