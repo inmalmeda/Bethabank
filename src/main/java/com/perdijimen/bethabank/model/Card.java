@@ -57,7 +57,7 @@ public class Card {
     @ApiModelProperty("Lista de movimientos realizados con la tarjeta")
     private List<Transaction> transactionList;
 
-    @JsonIgnore
+
     @ManyToOne()
     @JoinColumn(name = "account_id")
     @ApiModelProperty("Cuenta a la que pertenece la tarjeta")
