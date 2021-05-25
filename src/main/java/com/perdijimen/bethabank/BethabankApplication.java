@@ -142,9 +142,9 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Account> createDataAccount () {
 		List<Account> accountList = new ArrayList<>();
 
-		accountList.add(new Account("Cuenta corriente","ES78 23424234234234234234324",200000.00,LocalDate.of(2009, 10, 5),LocalDate.now()));
-		accountList.add(new Account("Cuenta corriente","ES78 34534535445324543434453",300000.00,LocalDate.of(2012, 9, 20),LocalDate.now()));
-		accountList.add(new Account("Cuenta ahorro","ES78 45364565465464565465464",50000.00,LocalDate.of(2018, 5, 3),LocalDate.now()));
+		accountList.add(new Account("BBVA","ES78 23424234234234234234324",200000.10,LocalDate.of(2009, 10, 5),LocalDate.now()));
+		accountList.add(new Account("BBVA","ES78 34534535445324543434453",300000.00,LocalDate.of(2012, 9, 20),LocalDate.now()));
+		accountList.add(new Account("BBVA","ES78 45364565465464565465464",50000.00,LocalDate.of(2018, 5, 3),LocalDate.now()));
 		return accountList;
 	}
 
