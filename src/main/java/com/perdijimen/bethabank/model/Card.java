@@ -52,6 +52,7 @@ public class Card {
     @ApiModelProperty("Titular de la tarjeta")
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "card")
     @ApiModelProperty("Lista de movimientos realizados con la tarjeta")
     private List<Transaction> transactionList;

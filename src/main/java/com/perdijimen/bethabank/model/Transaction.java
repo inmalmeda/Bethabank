@@ -41,7 +41,6 @@ public class Transaction {
     @ApiModelProperty("Balance en la cuenta al realizar la transacción")
     private Double total_amount;
 
-    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "account_id")
     @ApiModelProperty("Cuenta con la que se realiza la transacción")
@@ -53,7 +52,7 @@ public class Transaction {
    @ApiModelProperty("Categoría a la que pertenece la transacción")
    private Category category;
 
-   @JsonIgnore
+
    @ManyToOne()
    @JoinColumn(name = "card_id")
    @ApiModelProperty("Tarjeta con la que se realiza la transacción, puede ser de valor nulo")

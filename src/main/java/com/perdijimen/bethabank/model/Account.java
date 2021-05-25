@@ -47,6 +47,7 @@ public class Account {
     @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
     private List<User> userList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     @ApiModelProperty("Lista de movimientos realizados con la cuenta")
      private List<Transaction> transactionList;
