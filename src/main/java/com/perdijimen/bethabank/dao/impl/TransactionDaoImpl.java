@@ -46,6 +46,7 @@ public class TransactionDaoImpl implements TransactionDao {
         }
 
         criteria.select(root).where(builder.and(predicates.toArray(new Predicate[0])));
+        criteria.orderBy(builder.desc(root.get("transaction_date")));
 
         TypedQuery<Transaction> cardsQuery = manager.createQuery(criteria);
 
