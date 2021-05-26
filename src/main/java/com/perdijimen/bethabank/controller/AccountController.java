@@ -123,7 +123,7 @@ public class AccountController {
             @ApiParam("Id del usuario para hacer el análisis de todas las cuentas")
             @RequestParam(name="iduser", required = false) Long idUser,
             @ApiParam("Tipo de balance-> True: Cuenta, False: Tarjeta")
-            @RequestParam(name="type") Boolean type,
+            @RequestParam(name="type", required = false) Boolean type,
             @ApiParam("Fecha de inicio del análisis")
             @RequestParam(name="start", required = false) LocalDate startDate,
             @ApiParam("Fecha de inicio del final")
