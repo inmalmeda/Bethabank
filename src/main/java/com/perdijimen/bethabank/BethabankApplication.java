@@ -201,14 +201,13 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Category> createDataCategory () {
 		List<Category> categoryList = new ArrayList<>();
 
-		categoryList.add(new Category("Hogar"));
 		categoryList.add(new Category("Gasolina"));
-		categoryList.add(new Category("Supermercado"));
-		categoryList.add(new Category("Colegio"));
-		categoryList.add(new Category("Textil"));
-		categoryList.add(new Category("Comercio"));
-		categoryList.add(new Category("Restaurante"));
+		categoryList.add(new Category("Servicios"));
+		categoryList.add(new Category("Ropa"));
+		categoryList.add(new Category("Electrónica"));
+		categoryList.add(new Category("Restaurantes"));
 		categoryList.add(new Category("Otros"));
+
 
 		return categoryList;
 	}
