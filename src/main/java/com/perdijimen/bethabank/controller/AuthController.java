@@ -3,7 +3,9 @@ package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.config.AuthenticationRequest;
 import com.perdijimen.bethabank.config.AuthenticationResponse;
+import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.security.JWTUtil;
+import com.perdijimen.bethabank.services.UserService;
 import com.perdijimen.bethabank.services.impl.UserDetailsRegisterServiceImpl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping()
@@ -28,6 +32,9 @@ public class AuthController {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/auth")
     public ResponseEntity<AuthenticationResponse> createToken(@RequestBody AuthenticationRequest request) {
 
@@ -38,9 +45,12 @@ public class AuthController {
 
         UserDetails userDetails = userDetailsRegisterService.loadUserByUsername(request.getEmail());
 
+        User userLogged = userService.findByEmail(request.getEmail()).get();
+
         String jwt = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
-
+        AuthenticationResponse response = new AuthenticationResponse(jwt, userLogged.getName(),
+                                                                        userLogged.getLastname(), userLogged.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

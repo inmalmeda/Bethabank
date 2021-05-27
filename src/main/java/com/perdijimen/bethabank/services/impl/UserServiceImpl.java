@@ -61,15 +61,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+
+        Optional<User> user = this.userRepository.findByEmail(email);
+
+        return this.userRepository.findByEmail(email);
+    }
+
+    @Override
     public User createUser(User user) {
         log.info("createUSer");
 
         User userCreated = null;
 
-        Optional<User> userEmail = userRepository.findByEmail(Optional.ofNullable(user.getEmail()));
+        Optional<User> userEmail = userRepository.findByEmail(user.getEmail());
         Optional<User> userDNI = userRepository.findByDNI(user.getDNI());
 
-        if(user.getId() == null || userEmail.isPresent() || userDNI.isPresent()) {
+        if(user.getId() == null && !userEmail.isPresent() && !userDNI.isPresent()) {
 
                 String md5Hex = DigestUtils.md5Hex(user.getPassword()).toUpperCase();
                 user.setPassword(md5Hex);
@@ -81,9 +89,9 @@ public class UserServiceImpl implements UserService {
                 } catch (Exception e) {
                     log.error("Cannot save the user: {} , error : {}", user, e);
                 }
-            } else {
-                log.warn("Creating user with id");
-            }
+        } else {
+            log.warn("Creating user with id");
+        }
         return userCreated;
     }
 

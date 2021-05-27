@@ -13,6 +13,8 @@ public interface UserService {
 
     List<User> findAllByName(String name, Integer limit, Integer page);
 
+    Optional<User> findByEmail(String email);
+
     User createUser(User user);
 
     User updateUser(User user);
