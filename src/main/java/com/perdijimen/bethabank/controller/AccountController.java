@@ -125,9 +125,9 @@ public class AccountController {
             @ApiParam("Tipo de balance-> True: Cuenta, False: Tarjeta")
             @RequestParam(name="type", required = false) Boolean type,
             @ApiParam("Fecha de inicio del análisis")
-            @RequestParam(name="start", required = false) LocalDate startDate,
+            @RequestParam(name="start", required = false) String startDate,
             @ApiParam("Fecha de inicio del final")
-            @RequestParam(name="end", required = false) LocalDate endDate)  {
+            @RequestParam(name="end", required = false) String endDate)  {
 
        List<BalanceAnalyticResponse> analyticBalanceList = analyticService.getAnalyticsBalance(id, idUser, type, startDate, endDate);
 

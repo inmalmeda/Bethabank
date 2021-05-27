@@ -104,21 +104,24 @@ public class AnalyticServiceImpl implements AnalyticService {
     }
 
     @Override
-    public List<BalanceAnalyticResponse> getAnalyticsBalance(Long id, Long idUser, Boolean type, LocalDate start, LocalDate end) {
+    public List<BalanceAnalyticResponse> getAnalyticsBalance(Long id, Long idUser, Boolean type, String start, String end) {
         List<BalanceAnalyticResponse> analytic = new ArrayList<>();
 
+        LocalDate startDateRequest = null;
+        LocalDate endDateRequest = null;
+
         if(type != null){
-            start = start == null ? LocalDate.now().minusYears(1): start;
-            end = end == null ? LocalDate.now() : end;
+            startDateRequest = start == null ? LocalDate.now().minusYears(1): getDateFromString(start);
+            endDateRequest = end == null ? LocalDate.now() : getDateFromString(end);
 
             if(id !=null || idUser != null){
                 List<Transaction> transactionList = new ArrayList<>();
 
                 if(id != null){
-                    transactionList = transactionDao.getAnalyticTransactions(id, type, start, end);
+                    transactionList = transactionDao.getAnalyticTransactions(id, type, startDateRequest, endDateRequest);
                 }else{
                     List<Account> accountList = accountService.findAll(idUser,20,0);
-                    transactionList = transactionDao.getAnalyticTransactionsUser(accountList, start, end);
+                    transactionList = transactionDao.getAnalyticTransactionsUser(accountList, startDateRequest, endDateRequest);
                 }
 
                 analytic = dateAnalytics(transactionList);
@@ -240,5 +243,19 @@ public class AnalyticServiceImpl implements AnalyticService {
             }
         }
         return analytic;
+    }
+
+    private LocalDate getDateFromString(String date){
+            LocalDate dateCreated = null;
+            String[] dateSeparate = date.split("-");
+            if(dateSeparate.length==3){
+                int year = Integer.parseInt(dateSeparate[0]);
+                int month = Integer.parseInt(dateSeparate[1]);
+                int day = Integer.parseInt(dateSeparate[1]);
+                dateCreated = LocalDate.of(year, month, day);
+            }  else{
+                dateCreated = LocalDate.now();
+            }
+            return dateCreated;
     }
 }
