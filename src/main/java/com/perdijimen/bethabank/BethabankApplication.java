@@ -173,7 +173,7 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<User> createDataUser () {
 		List<User> userList = new ArrayList<>();
 
-		userList.add(new User("Inma","Jimenez",LocalDate.now(),"", "inma@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
+		userList.add(new User("Victor","López",LocalDate.now(),"678787878", "victor@email.com", "25D55AD283AA400AF464C76D713C07AD", "24343545S", "C/Larios","Malaga","Spain",LocalDate.now(), LocalDate.now()));
 		userList.add(new User("Miguel","Perdiguero",LocalDate.now(),"", "miguel@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
 		userList.add(new User("Patri","Almeda",LocalDate.now(),"", "patri@email.com", "", "", "","Malaga","Spain",LocalDate.now(), LocalDate.now()));
 		return userList;
