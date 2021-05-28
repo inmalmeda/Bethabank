@@ -69,12 +69,21 @@ public class CardServiceImpl implements CardService {
                 LocalDate.now(),LocalDate.now(), generatePassword(card.getPassword()));
 
         try{
-            Optional<Account>account = accountService.findById(card.getIdAccount());
+            /*Optional<Account>account = accountService.findById(card.getIdAccount());
             Optional<User> user = Optional.empty();
 
             for (User userSearched: account.get().getUserList()) {
                 if(userSearched.getId() == card.getIdUser()){
                     user = userService.findById(card.getIdUser());
+                }
+            }*/
+
+            Optional<User> user = userService.findById(card.getIdUser());
+            Optional<Account> account = Optional.empty();
+
+            for (Account accountSearched: user.get().getOwnerAccountList()) {
+                if (accountSearched.getId() == card.getIdAccount()) {
+                    account = accountService.findById(card.getIdAccount());
                 }
             }
 
