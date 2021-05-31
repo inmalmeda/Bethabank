@@ -65,8 +65,7 @@ public class UserController {
 
         UserResponse userDB = userService.createUser(user);
 
-        return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
-                                    ResponseEntity.created(new URI("/api/users/" + userDB.getId())).body(userDB);
+        return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : ResponseEntity.ok(userDB);
     }
 
     /**
