@@ -1,6 +1,7 @@
 package com.perdijimen.bethabank.controller;
 
 import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.response.UserResponse;
 import com.perdijimen.bethabank.services.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,11 +59,11 @@ public class UserController {
      */
     @PostMapping("/users")
     @ApiOperation("Guarda en base de datos un usuario nuevo")
-    public ResponseEntity<User> createUser(
+    public ResponseEntity<UserResponse> createUser(
             @ApiParam("Objeto usuario nuevo")
             @RequestBody User user) throws URISyntaxException {
 
-        User userDB = userService.createUser(user);
+        UserResponse userDB = userService.createUser(user);
 
         return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
                                     ResponseEntity.created(new URI("/api/users/" + userDB.getId())).body(userDB);

@@ -5,6 +5,7 @@ import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Transaction;
 import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.response.UserResponse;
 import com.perdijimen.bethabank.repository.UserRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
@@ -69,10 +70,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
+    public UserResponse createUser(User user) {
         log.info("createUSer");
 
-        User userCreated = null;
+        UserResponse resultUser = null;
 
         Optional<User> userEmail = userRepository.findByEmail(user.getEmail());
         Optional<User> userDNI = userRepository.findByDNI(user.getDNI());
@@ -85,14 +86,20 @@ public class UserServiceImpl implements UserService {
                 try {
                     user.setCreated_at(LocalDate.now());
                     user.setUpdated_at(LocalDate.now());
-                    userCreated = userRepository.save(user);
+                    User userCreated = userRepository.save(user);
+                    resultUser = transformUser(userCreated);
+                    resultUser.setMessageResponse("Usuario creado correctamente");
                 } catch (Exception e) {
                     log.error("Cannot save the user: {} , error : {}", user, e);
                 }
         } else {
-            log.warn("Creating user with id");
+            log.warn("Creating user with id or email and dni is present in bbdd");
+
+            resultUser = new UserResponse();
+            resultUser.setMessageResponse(userEmail.isPresent() ? "Error al crear el usuario: El email ya existe"
+                                                        : "Error al crear el usuario: El DNI ya existe");
         }
-        return userCreated;
+        return resultUser;
     }
 
     @Override
@@ -157,4 +164,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    private UserResponse transformUser (User user){
+        return new UserResponse(user.getId(), user.getName(), user.getLastname(), user.getEmail());
+    }
 }

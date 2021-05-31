@@ -1,6 +1,7 @@
 package com.perdijimen.bethabank.services;
 
 import com.perdijimen.bethabank.model.User;
+import com.perdijimen.bethabank.model.response.UserResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    User createUser(User user);
+    UserResponse createUser(User user);
 
     User updateUser(User user);
 
