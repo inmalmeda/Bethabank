@@ -8,6 +8,8 @@ import com.perdijimen.bethabank.model.User;
 import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.model.request.CardUpdateRequest;
+import com.perdijimen.bethabank.model.response.AccountOfCardResponse;
+import com.perdijimen.bethabank.model.response.CardResponse;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.repository.TransactionRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,9 +52,17 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<Card> findAll(Long idUser, Integer limit, Integer page) {
+    public List<CardResponse> findAll(Long idUser, Integer limit, Integer page) {
         log.debug("Find all cards");
-        return cardDao.findAll(idUser, limit, page);
+
+        List<Card> cardList = cardDao.findAll(idUser, limit, page);
+
+        List<CardResponse> responseCardList = new ArrayList<>();
+
+        for (Card card: cardList) {
+            responseCardList.add(transformResponse(card));
+        }
+        return responseCardList;
     }
 
     @Override
@@ -69,21 +80,12 @@ public class CardServiceImpl implements CardService {
                 LocalDate.now(),LocalDate.now(), generatePassword(card.getPassword()));
 
         try{
-            /*Optional<Account>account = accountService.findById(card.getIdAccount());
+            Optional<Account>account = accountService.findById(card.getIdAccount());
             Optional<User> user = Optional.empty();
 
             for (User userSearched: account.get().getUserList()) {
                 if(userSearched.getId() == card.getIdUser()){
                     user = userService.findById(card.getIdUser());
-                }
-            }*/
-
-            Optional<User> user = userService.findById(card.getIdUser());
-            Optional<Account> account = Optional.empty();
-
-            for (Account accountSearched: user.get().getOwnerAccountList()) {
-                if (accountSearched.getId() == card.getIdAccount()) {
-                    account = accountService.findById(card.getIdAccount());
                 }
             }
 
@@ -204,4 +206,11 @@ public class CardServiceImpl implements CardService {
         return  DigestUtils.md5Hex(password).toUpperCase();
     }
 
+    private CardResponse transformResponse (Card card){
+        AccountOfCardResponse account = new AccountOfCardResponse(card.getAccount().getId(), card.getAccount().getName(),
+                                                                    card.getAccount().getIBAN(), card.getAccount().getTotal_amount());
+
+        return new CardResponse(card.getId(), card.getCard_number(), card.getName_type(), card.getExpiration_date(), card.getCreated_at(),
+                card.getUpdated_at(), account);
+    }
 }

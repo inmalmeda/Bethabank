@@ -3,6 +3,7 @@ package com.perdijimen.bethabank.controller;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.model.request.CardUpdateRequest;
+import com.perdijimen.bethabank.model.response.CardResponse;
 import com.perdijimen.bethabank.services.CardService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -36,7 +37,7 @@ public class CardController {
      */
     @GetMapping("/cards")
     @ApiOperation("Encuentra todas las tarjetas con filtro de id de usuario y paginación")
-    public ResponseEntity<List<Card>> findAll(
+    public ResponseEntity<List<CardResponse>> findAll(
             @ApiParam("Id del usuario para buscar las tarjetas")
             @RequestParam(name= "id") Long idUser,
             @ApiParam("Número de tarjetas que se quieren recuperar")
@@ -44,7 +45,7 @@ public class CardController {
             @ApiParam("Número de registro en el que empieza la búsqueda")
             @RequestParam(name = "page", defaultValue="0") Integer page){
 
-        List<Card> cardList = cardService.findAll(idUser, limit, page);
+        List<CardResponse> cardList = cardService.findAll(idUser, limit, page);
 
         if(cardList.isEmpty()){
             return new ResponseEntity(HttpStatus.NOT_FOUND);

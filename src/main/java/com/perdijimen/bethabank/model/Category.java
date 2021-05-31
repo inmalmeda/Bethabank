@@ -22,7 +22,7 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    @OneToMany(mappedBy = "category", orphanRemoval = true, cascade = CascadeType.ALL)
     @ApiModelProperty("Lista de movimientos asociados a la categoría")
     private List<Transaction> transactionList ;
 

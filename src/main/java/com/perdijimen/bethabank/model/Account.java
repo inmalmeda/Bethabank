@@ -43,7 +43,7 @@ public class Account {
     private User titularUser;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "ownerAccountList", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToMany(mappedBy = "ownerAccountList", fetch = FetchType.EAGER)
     @ApiModelProperty("Lista de usuarios que pertenecen a la cuenta")
     private List<User> userList;
 
@@ -52,7 +52,6 @@ public class Account {
     @ApiModelProperty("Lista de movimientos realizados con la cuenta")
      private List<Transaction> transactionList;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "account")
     @ApiModelProperty("Lista de tarjetas asociadas a la cuenta")
      private List<Card> cardList;

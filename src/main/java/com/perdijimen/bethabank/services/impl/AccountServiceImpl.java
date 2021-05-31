@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -71,26 +70,29 @@ public class AccountServiceImpl implements AccountService {
                 }while(accountRepository.findByIBAN(accountToCreate.getIBAN()) != null);
 
                 //Se indica el usuario titular y se inserta dentro de la lista de propietarios de la cuenta
-                accountToCreate.setTitularUser(userAccount.get());
-                accountToCreate.setUserList(Arrays.asList(userAccount.get()));
                 userAccount.get().getTitularAccountList().add(accountToCreate);
                 userAccount.get().getOwnerAccountList().add(accountToCreate);
+                //userService.updateUser(userAccount.get());
+                accountToCreate.setTitularUser(userAccount.get());
+                accountToCreate.setUserList(new ArrayList<>());
+                accountToCreate.getUserList().add(userAccount.get());
 
                 //Guardado en bbdd de titular y propietarios de la cuenta
                 try{
-                    userService.updateUser(userAccount.get());
                     accountToCreate = accountRepository.save(accountToCreate);
 
                     for(int i = 0; i<account.getIdUserOwnerList().size(); i++){
                         Optional<User> userOwnerAccount = userService.findById(account.getIdUserOwnerList().get(i));
 
                          if(userOwnerAccount.isPresent() && userOwnerAccount.get() != userAccount.get()){
-                                accountToCreate.getUserList().add(userOwnerAccount.get());
                                 userOwnerAccount.get().getOwnerAccountList().add(accountToCreate);
-                                userService.updateUser(userOwnerAccount.get());
-                                accountToCreate = accountRepository.save(accountToCreate);
+                                accountToCreate.getUserList().add(userOwnerAccount.get());
+                                //userService.updateUser(userOwnerAccount.get());
+                                //accountToCreate = accountRepository.save(accountToCreate);
                          }
                     }
+
+                    accountToCreate = updateAccountObject(accountToCreate);
 
                 }catch(Exception e) {
                     log.error("Cannot save the account: {} , error : {}", account, e);
