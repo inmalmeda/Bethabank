@@ -20,6 +20,8 @@ public class UserResponse {
 
     private String messageResponse;
 
+    private Boolean created;
+
     public UserResponse() {
     }
 
@@ -68,5 +70,13 @@ public class UserResponse {
 
     public void setMessageResponse(String messageResponse) {
         this.messageResponse = messageResponse;
+    }
+
+    public Boolean getCreated() {
+        return created;
+    }
+
+    public void setCreated(Boolean created) {
+        this.created = created;
     }
 }

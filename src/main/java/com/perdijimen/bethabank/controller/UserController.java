@@ -64,6 +64,7 @@ public class UserController {
             @RequestBody User user) throws URISyntaxException {
 
         UserResponse userDB = userService.createUser(user);
+        userDB.setCreated(userDB.getId() != null);
 
         return userDB == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : ResponseEntity.ok(userDB);
     }
