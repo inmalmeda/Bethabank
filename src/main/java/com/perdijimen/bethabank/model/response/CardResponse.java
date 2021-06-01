@@ -1,4 +1,4 @@
-package com.perdijimen.bethabank.model.response.card;
+package com.perdijimen.bethabank.model.response;
 
 import com.perdijimen.bethabank.model.response.AccountOfCardResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,6 @@ public class CardResponse {
     private LocalDate updated_at;
 
     private AccountOfCardResponse account;
-
-    private ResponseEntity response;
 
     public CardResponse(Long id, String card_number, String name_type, LocalDate expiration_date, LocalDate created_at, LocalDate updated_at, AccountOfCardResponse account) {
         this.id = id;
@@ -87,13 +85,5 @@ public class CardResponse {
 
     public void setAccount(AccountOfCardResponse account) {
         this.account = account;
-    }
-
-    public ResponseEntity getResponse() {
-        return response;
-    }
-
-    public void setResponse(ResponseEntity response) {
-        this.response = response;
     }
 }

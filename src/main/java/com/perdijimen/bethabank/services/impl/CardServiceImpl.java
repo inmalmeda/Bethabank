@@ -9,7 +9,7 @@ import com.perdijimen.bethabank.model.request.AccountUpdateRequest;
 import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.model.request.CardUpdateRequest;
 import com.perdijimen.bethabank.model.response.AccountOfCardResponse;
-import com.perdijimen.bethabank.model.response.card.CardResponse;
+import com.perdijimen.bethabank.model.response.CardResponse;
 import com.perdijimen.bethabank.repository.CardRepository;
 import com.perdijimen.bethabank.services.AccountService;
 import com.perdijimen.bethabank.services.CardService;
