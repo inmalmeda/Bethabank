@@ -3,7 +3,7 @@ package com.perdijimen.bethabank.services;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.request.CardRequest;
 import com.perdijimen.bethabank.model.request.CardUpdateRequest;
-import com.perdijimen.bethabank.model.response.CardResponse;
+import com.perdijimen.bethabank.model.response.card.CardResponse;
 
 import java.util.List;
 import java.util.Optional;
