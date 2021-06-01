@@ -151,22 +151,13 @@ public class BethabankApplication implements CommandLineRunner {
 	private List<Transaction> createDataTransation () {
 		List<Transaction> transationList = new ArrayList<>();
 
-		transationList.add(new Transaction(200.35,LocalDate.of(2021, 2, 1),
+		transationList.add(new Transaction(200.35,LocalDate.of(2021, 1, 10),
 				LocalTime.of(11, 00, 59), "" , true, 200050.00, "Ingreso de la mutua"));
-		transationList.add(new Transaction(150.35,LocalDate.of(2021, 5, 10),
+		transationList.add(new Transaction(150.35,LocalDate.of(2021, 6, 10),
 				LocalTime.of(21, 05, 39),"",false, 199849.65, "Pago alquiler"));
-		transationList.add(new Transaction(432.45,LocalDate.of(2021, 5, 12),
+		transationList.add(new Transaction(432.45,LocalDate.of(2021, 6, 12),
 				LocalTime.of(9, 15, 19),"",false, 199617.55 , "Pago letra vehiculo"));
 
-		/*
-		transationList.add(new Transaction(55.25,LocalDate.now(),"",false));
-		transationList.add(new Transaction(23.40,LocalDate.now(),"",true));
-		transationList.add(new Transaction(86.20,LocalDate.now(),"",false));
-		transationList.add(new Transaction(110.10,LocalDate.now(),"",true));
-		transationList.add(new Transaction(10.14,LocalDate.now(),"",false));
-		transationList.add(new Transaction(5.35,LocalDate.now(),"",true));
-		transationList.add(new Transaction(32.60,LocalDate.now(),"",false));
-*/
 		return transationList;
 	}
 
