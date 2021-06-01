@@ -153,7 +153,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		transationList.add(new Transaction(200.35,LocalDate.of(2021, 1, 10),
 				LocalTime.of(11, 00, 59), "" , true, 200050.00, "Ingreso de la mutua"));
-		transationList.add(new Transaction(150.35,LocalDate.of(2021, 6, 10),
+		transationList.add(new Transaction(150.35,LocalDate.of(2021, 6, 1),
 				LocalTime.of(21, 05, 39),"",false, 199849.65, "Pago alquiler"));
 		transationList.add(new Transaction(432.45,LocalDate.of(2021, 6, 12),
 				LocalTime.of(9, 15, 19),"",false, 199617.55 , "Pago letra vehiculo"));
