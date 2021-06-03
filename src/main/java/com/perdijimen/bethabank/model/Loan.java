@@ -101,4 +101,20 @@ public class Loan {
     public void setAccountCollection(Account accountCollection) {
         this.accountCollection = accountCollection;
     }
+
+    public Double getAmountPerFee() {
+        return amountPerFee;
+    }
+
+    public void setAmountPerFee(Double amountPerFee) {
+        this.amountPerFee = amountPerFee;
+    }
+
+    public Double getAmountLoan() {
+        return amountLoan;
+    }
+
+    public void setAmountLoan(Double amountLoan) {
+        this.amountLoan = amountLoan;
+    }
 }

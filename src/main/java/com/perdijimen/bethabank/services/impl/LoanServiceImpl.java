@@ -1,8 +1,12 @@
 package com.perdijimen.bethabank.services.impl;
 
+import com.perdijimen.bethabank.dao.LoanDao;
 import com.perdijimen.bethabank.model.Account;
+import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Loan;
 import com.perdijimen.bethabank.model.request.LoanRequest;
+import com.perdijimen.bethabank.model.response.CardResponse;
+import com.perdijimen.bethabank.model.response.LoanGetAllResponse;
 import com.perdijimen.bethabank.model.response.LoanResponse;
 import com.perdijimen.bethabank.repository.LoanRepository;
 import com.perdijimen.bethabank.services.AccountService;
@@ -14,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,11 +31,40 @@ public class LoanServiceImpl implements LoanService {
     private EntityManager manager;
 
     private LoanRepository loanRepository;
+    private LoanDao loanDao;
     @Autowired
     private AccountService accountService;
 
-    public LoanServiceImpl(LoanRepository loanRepository) {
+    public LoanServiceImpl(LoanRepository loanRepository, LoanDao loanDao) {
         this.loanRepository = loanRepository;
+        this.loanDao = loanDao;
+    }
+
+    @Override
+    public List<LoanGetAllResponse> findAll(Long idUser, Integer limit, Integer page) {
+        log.debug("Find all loans");
+
+        List<Account> accountList = accountService.findAll(idUser,20, 0);
+        List<Loan> loanList = new ArrayList<>();
+        List<LoanGetAllResponse> response = new ArrayList<>();
+
+        for (Account account: accountList) {
+            List<Loan> list = loanDao.findAll(account.getId(), 20, 0);
+
+            if(!list.isEmpty()){
+                for(Loan loan : list){
+                    loanList.add(loan);
+                }
+            }
+        }
+
+        if(!loanList.isEmpty()){
+            response = new ArrayList<>();
+            for(Loan loan : loanList){
+                response.add(transformResponse(loan));
+            }
+        }
+        return response;
     }
 
     @Override
@@ -95,5 +130,10 @@ public class LoanServiceImpl implements LoanService {
             default: return 0.08;
         }
 
+    }
+
+    private LoanGetAllResponse transformResponse (Loan loan){
+        return new LoanGetAllResponse(loan.getAmount(),loan.getAmountPerFee(), loan.getAmountLoan(),
+                loan.getFee(), loan.getInterestRate(), loan.getAccountInCome().getIBAN(), loan.getAccountCollection().getIBAN());
     }
 }
