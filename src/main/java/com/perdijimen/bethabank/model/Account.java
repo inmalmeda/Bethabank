@@ -56,6 +56,14 @@ public class Account {
     @ApiModelProperty("Lista de tarjetas asociadas a la cuenta")
      private List<Card> cardList;
 
+    @OneToMany(mappedBy = "accountInCome")
+    @ApiModelProperty("Lista de préstamos que se ingresan en la cuenta")
+    private List<Loan> loanIncomeList;
+
+    @OneToMany(mappedBy = "accountCollection")
+    @ApiModelProperty("Lista de préstamos que se cobran de la cuenta")
+    private List<Loan> loanCollectionList;
+
     public Account() {
     }
 
@@ -145,6 +153,22 @@ public class Account {
 
     public void setTitularUser(User titularUser) {
         this.titularUser = titularUser;
+    }
+
+    public List<Loan> getLoanIncomeList() {
+        return loanIncomeList;
+    }
+
+    public void setLoanIncomeList(List<Loan> loanIncomeList) {
+        this.loanIncomeList = loanIncomeList;
+    }
+
+    public List<Loan> getLoanCollectionList() {
+        return loanCollectionList;
+    }
+
+    public void setLoanCollectionList(List<Loan> loanCollectionList) {
+        this.loanCollectionList = loanCollectionList;
     }
 
     @Override
