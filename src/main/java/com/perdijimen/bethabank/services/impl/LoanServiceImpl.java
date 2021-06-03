@@ -1,6 +1,7 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.LoanDao;
+import com.perdijimen.bethabank.manager.LoanThread;
 import com.perdijimen.bethabank.model.Account;
 import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Loan;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,6 +82,11 @@ public class LoanServiceImpl implements LoanService {
                 loanCreated = createLoan(loan, loanResponse);
             }
             loanResponse.setCreated(loanCreated != null);
+            if(loanCreated != null){
+                Optional<Account> accountInCome = accountService.findById(loan.getIdAccountInCome());
+                accountInCome.get().setTotal_amount(accountInCome.get().getTotal_amount() + loan.getAmount());
+                manageLoan(loanCreated);
+            }
 
         }else{
             log.error("Cannot calculate loan: {} , amount and/or fee are null", loan);
@@ -114,6 +121,42 @@ public class LoanServiceImpl implements LoanService {
         }
         return loanCreated;
     }
+
+    @Override
+    public Loan updateLoan(Loan loan) {
+        log.info("updateLoan");
+
+        Loan result = null;
+
+        if (loanRepository.existsById(loan.getId())) {
+            try{
+                result = loanRepository.save(loan);
+            }catch(Exception e){
+                log.error("Cannot save loan: {} , error : {}", loan, e);
+            }
+        }else{
+            log.warn("Cannot save card: {}, because it doesn´t exist", loan);
+        }
+        return result;
+    }
+
+    public void manageLoan (Loan loan){
+        LoanThread mh=new LoanThread(loan, this, accountService);
+        Thread nuevoh=new Thread(mh);
+
+        nuevoh.start();
+
+        for (int i=0; i<50;i++){
+            System.out.print(" .");
+        }try{
+            Thread.sleep(100);
+        }catch (InterruptedException exc){
+            System.out.println("Hilo principal interrumpido.");
+        }
+        System.out.println("Hilo principal finalizado.");
+    }
+
+
 
     private LoanResponse calculateLoan (Double amount, Integer fee,  Double interestRate){
 

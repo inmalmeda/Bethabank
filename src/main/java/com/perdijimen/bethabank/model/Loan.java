@@ -117,4 +117,15 @@ public class Loan {
     public void setAmountLoan(Double amountLoan) {
         this.amountLoan = amountLoan;
     }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", amountPerFee=" + amountPerFee +
+                ", amountLoan=" + amountLoan +
+                ", fee=" + fee +
+                '}';
+    }
 }

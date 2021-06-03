@@ -14,4 +14,7 @@ public interface LoanService {
     LoanResponse calculateAndcreateLoan(LoanRequest loan);
 
     Loan createLoan (LoanRequest request, LoanResponse response);
+
+    Loan updateLoan(Loan loan);
+
 }
