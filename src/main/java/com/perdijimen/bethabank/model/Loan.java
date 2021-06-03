@@ -15,8 +15,14 @@ public class Loan {
     @ApiModelProperty("Clave primaria tipo Long")
     private Long id;
 
-    @ApiModelProperty("Cantidad del préstamo")
+    @ApiModelProperty("Cantidad del préstamo que falta por pagar")
     private Double amount;
+
+    @ApiModelProperty("Cantidad a pagar por cada cuota")
+    private Double amountPerFee;
+
+    @ApiModelProperty("Cantidad total del préstamo")
+    private Double amountLoan;
 
     @ApiModelProperty("Número de cuotas")
     private Integer fee;
@@ -34,17 +40,16 @@ public class Loan {
     private Account accountCollection;
 
     @ApiModelProperty("Cuenta de cobro del préstamo")
-    private String interestRate;
+    private Double interestRate;
 
     public Loan() {
     }
 
-    public Loan(Long id, Double amount, Integer fee, Account accountInCome, Account accountCollection, String interestRate) {
-        this.id = id;
+    public Loan(Double amount, Double amountPerFee, Double amountLoan, Integer fee, Double interestRate) {
         this.amount = amount;
+        this.amountPerFee = amountPerFee;
+        this.amountLoan = amountLoan;
         this.fee = fee;
-        this.accountInCome = accountInCome;
-        this.accountCollection = accountCollection;
         this.interestRate = interestRate;
     }
 
@@ -81,11 +86,11 @@ public class Loan {
     }
 
 
-    public String getInterestRate() {
+    public Double getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(String interestRate) {
+    public void setInterestRate(Double interestRate) {
         this.interestRate = interestRate;
     }
 
