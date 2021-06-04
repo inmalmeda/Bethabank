@@ -1,12 +1,10 @@
 package com.perdijimen.bethabank.services.impl;
 
 import com.perdijimen.bethabank.dao.LoanDao;
-import com.perdijimen.bethabank.manager.LoanThread;
+import com.perdijimen.bethabank.threads.LoanThread;
 import com.perdijimen.bethabank.model.Account;
-import com.perdijimen.bethabank.model.Card;
 import com.perdijimen.bethabank.model.Loan;
 import com.perdijimen.bethabank.model.request.LoanRequest;
-import com.perdijimen.bethabank.model.response.CardResponse;
 import com.perdijimen.bethabank.model.response.LoanGetAllResponse;
 import com.perdijimen.bethabank.model.response.LoanResponse;
 import com.perdijimen.bethabank.repository.LoanRepository;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +101,7 @@ public class LoanServiceImpl implements LoanService {
 
         if (accountInCome.isPresent() && accountCollection.isPresent()) {
             Loan loanToCreate = new Loan(response.getAmount(), response.getAmountPerFee(),
-                                    response.getAmount(), response.getFee(), response.getInterestRate());
+                                    response.getAmount(), response.getFee(), response.getFee(),response.getInterestRate());
             accountCollection.get().getLoanCollectionList().add(loanToCreate);
             accountInCome.get().getLoanIncomeList().add(loanToCreate);
             loanToCreate.setAccountCollection(accountCollection.get());
@@ -140,20 +137,12 @@ public class LoanServiceImpl implements LoanService {
         return result;
     }
 
+    @Override
     public void manageLoan (Loan loan){
         LoanThread mh=new LoanThread(loan, this, accountService);
-        Thread nuevoh=new Thread(mh);
+        Thread loanthread=new Thread(mh);
 
-        nuevoh.start();
-
-        for (int i=0; i<50;i++){
-            System.out.print(" .");
-        }try{
-            Thread.sleep(100);
-        }catch (InterruptedException exc){
-            System.out.println("Hilo principal interrumpido.");
-        }
-        System.out.println("Hilo principal finalizado.");
+        loanthread.start();
     }
 
 
@@ -177,6 +166,7 @@ public class LoanServiceImpl implements LoanService {
 
     private LoanGetAllResponse transformResponse (Loan loan){
         return new LoanGetAllResponse(loan.getAmount(),loan.getAmountPerFee(), loan.getAmountLoan(),
-                loan.getFee(), loan.getInterestRate(), loan.getAccountInCome().getIBAN(), loan.getAccountCollection().getIBAN());
+                loan.getFee(), loan.getFeeLoan(), loan.getInterestRate(), loan.getAccountInCome().getIBAN(),
+                loan.getAccountCollection().getIBAN());
     }
 }

@@ -2,7 +2,9 @@ package com.perdijimen.bethabank;
 
 import com.perdijimen.bethabank.model.*;
 import com.perdijimen.bethabank.repository.*;
+import com.perdijimen.bethabank.services.LoanService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +24,8 @@ public class BethabankApplication implements CommandLineRunner {
 	final TransactionRepository transactionRepository;
 	final AccountRepository accountRepository;
 	final LoanRepository loanRepository;
+	@Autowired
+	LoanService loanService;
 
 	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository,
 								TransactionRepository transactionRepository, AccountRepository accountRepository,
@@ -62,6 +66,7 @@ public class BethabankApplication implements CommandLineRunner {
 
 		for(Loan loan: loanList){
 			loanRepository.save(loan);
+			loanService.manageLoan(loan);
 		}
 
 		for (Account account: accountList) {
@@ -163,8 +168,8 @@ public class BethabankApplication implements CommandLineRunner {
 
 	private List<Loan> createDataLoan (){
 		List<Loan> loanList = new ArrayList<>();
-		loanList.add(new Loan(300.00, 30.00, 300.00, 10, 0.01));
-		loanList.add(new Loan(500.00, 50.00, 500.00, 10, 0.01));
+		loanList.add(new Loan(106.00, 10.60, 100.00, 10, 10, 0.06));
+		loanList.add(new Loan(530.00, 53.00, 530.00, 10, 10, 0.06));
 		return loanList;
 	}
 

@@ -17,4 +17,6 @@ public interface LoanService {
 
     Loan updateLoan(Loan loan);
 
+    void manageLoan (Loan loan);
+
 }

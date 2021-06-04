@@ -10,6 +10,8 @@ public class LoanGetAllResponse {
 
     private Integer fee;
 
+    private Integer feeLoan;
+
     private Double interestRate;
 
     private String accountIncome;
@@ -19,11 +21,13 @@ public class LoanGetAllResponse {
     public LoanGetAllResponse() {
     }
 
-    public LoanGetAllResponse(Double amount, Double amountPerFee, Double amountLoan, Integer fee, Double interestRate, String accountIncome, String accountCollection) {
+    public LoanGetAllResponse(Double amount, Double amountPerFee, Double amountLoan, Integer fee, Integer feeLoan, Double interestRate,
+                              String accountIncome, String accountCollection) {
         this.amount = amount;
         this.amountPerFee = amountPerFee;
         this.amountLoan = amountLoan;
         this.fee = fee;
+        this.feeLoan = feeLoan;
         this.interestRate = interestRate;
         this.accountIncome = accountIncome;
         this.accountCollection = accountCollection;
@@ -83,5 +87,13 @@ public class LoanGetAllResponse {
 
     public void setAccountCollection(String accountCollection) {
         this.accountCollection = accountCollection;
+    }
+
+    public Integer getFeeLoan() {
+        return feeLoan;
+    }
+
+    public void setFeeLoan(Integer feeLoan) {
+        this.feeLoan = feeLoan;
     }
 }

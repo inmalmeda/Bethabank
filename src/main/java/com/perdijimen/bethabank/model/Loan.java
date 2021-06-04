@@ -24,8 +24,11 @@ public class Loan {
     @ApiModelProperty("Cantidad total del préstamo")
     private Double amountLoan;
 
-    @ApiModelProperty("Número de cuotas")
+    @ApiModelProperty("Número de cuotas que faltan por pagar")
     private Integer fee;
+
+    @ApiModelProperty("Número de cuotas del préstamo")
+    private Integer feeLoan;
 
     @JsonIgnore
     @ManyToOne()
@@ -45,11 +48,12 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(Double amount, Double amountPerFee, Double amountLoan, Integer fee, Double interestRate) {
+    public Loan( Double amount, Double amountPerFee, Double amountLoan, Integer fee, Integer feeLoan, Double interestRate) {
         this.amount = amount;
         this.amountPerFee = amountPerFee;
         this.amountLoan = amountLoan;
         this.fee = fee;
+        this.feeLoan = feeLoan;
         this.interestRate = interestRate;
     }
 
@@ -116,6 +120,14 @@ public class Loan {
 
     public void setAmountLoan(Double amountLoan) {
         this.amountLoan = amountLoan;
+    }
+
+    public Integer getFeeLoan() {
+        return feeLoan;
+    }
+
+    public void setFeeLoan(Integer feeLoan) {
+        this.feeLoan = feeLoan;
     }
 
     @Override
