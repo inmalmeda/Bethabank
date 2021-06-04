@@ -21,13 +21,17 @@ public class BethabankApplication implements CommandLineRunner {
 	final CategoryRepository categoryRepository;
 	final TransactionRepository transactionRepository;
 	final AccountRepository accountRepository;
+	final LoanRepository loanRepository;
 
-	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository, TransactionRepository transactionRepository, AccountRepository accountRepository) {
+	public BethabankApplication(UserRepository userRepository, CardRepository cardRepository, CategoryRepository categoryRepository,
+								TransactionRepository transactionRepository, AccountRepository accountRepository,
+								LoanRepository loanRepository) {
 		this.userRepository = userRepository;
 		this.cardRepository = cardRepository;
 		this.categoryRepository = categoryRepository;
 		this.transactionRepository = transactionRepository;
 		this.accountRepository = accountRepository;
+		this.loanRepository = loanRepository;
 	}
 
 	public static void main(String[] args) {
@@ -42,8 +46,10 @@ public class BethabankApplication implements CommandLineRunner {
 		List<Card> cardList = createDataCard();
 		List<Transaction> transactionList = createDataTransation();
 		List<Category> categoryList = createDataCategory();
+		List<Loan> loanList = createDataLoan();
 
-		accountList = relationAccount(userList, cardList, transactionList, accountList);
+		loanList = relationLoan(accountList, loanList);
+		accountList = relationAccount(userList, cardList, transactionList, accountList, loanList);
 		cardList = relationCard(userList, cardList, transactionList, accountList);
 		userList = relationUser(userList, cardList, accountList);
 		transactionList = relationTransation(categoryList, transactionList, cardList, accountList);
@@ -52,6 +58,10 @@ public class BethabankApplication implements CommandLineRunner {
 
 		for (User user: userList) {
 			userRepository.save(user);
+		}
+
+		for(Loan loan: loanList){
+			loanRepository.save(loan);
 		}
 
 		for (Account account: accountList) {
@@ -72,8 +82,19 @@ public class BethabankApplication implements CommandLineRunner {
 
 	}
 
+	private List<Loan> relationLoan (List<Account> accountList, List<Loan> loans){
+		List<Loan> loanList = loans;
 
-	private List<Account> relationAccount (List<User> userList, List<Card> cardList, List<Transaction> transactionList, List<Account> accounts) {
+		loanList.get(0).setAccountInCome(accountList.get(1));
+		loanList.get(0).setAccountCollection(accountList.get(0));
+		loanList.get(1).setAccountInCome(accountList.get(1));
+		loanList.get(1).setAccountCollection(accountList.get(0));
+
+		return  loanList;
+	}
+
+	private List<Account> relationAccount (List<User> userList, List<Card> cardList, List<Transaction> transactionList,
+										   List<Account> accounts, List<Loan> loanList) {
 		List<Account> accountList = accounts;
 
 		accountList.get(0).setCardList(Arrays.asList(cardList.get(0), cardList.get(1)));
@@ -85,7 +106,8 @@ public class BethabankApplication implements CommandLineRunner {
 		accountList.get(0).setTitularUser(userList.get(0));
 		accountList.get(1).setTitularUser(userList.get(0));
 		accountList.get(2).setTitularUser(userList.get(1));
-
+		accountList.get(0).setLoanCollectionList(loanList);
+		accountList.get(1).setLoanIncomeList(loanList);
 		return accountList;
 	}
 
@@ -137,6 +159,13 @@ public class BethabankApplication implements CommandLineRunner {
 		categoryList.get(1).setTransactionList(Arrays.asList(transations.get(1)));
 
 		return categoryList;
+	}
+
+	private List<Loan> createDataLoan (){
+		List<Loan> loanList = new ArrayList<>();
+		loanList.add(new Loan(300.00, 30.00, 300.00, 10, 0.01));
+		loanList.add(new Loan(500.00, 50.00, 500.00, 10, 0.01));
+		return loanList;
 	}
 
 	private List<Account> createDataAccount () {
