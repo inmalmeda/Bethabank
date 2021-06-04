@@ -25,7 +25,7 @@ public class LoanThread implements Runnable{
         try {
             int countFee = loan.getFee();
             for (int fee=0; fee<countFee; fee++){
-                Thread.sleep(10000);
+                Thread.sleep(120000);
                 loan.setAmount(loan.getAmount() - loan.getAmountPerFee());
                 loan.setFee(loan.getFee()-1);
                 this.loan = loanService.updateLoan(loan);
