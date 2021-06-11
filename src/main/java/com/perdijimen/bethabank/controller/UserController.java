@@ -76,7 +76,7 @@ public class UserController {
      * @param user User to update
      * @return Response of update user
      */
-    @PutMapping("/users")
+    @PutMapping("/api/users")
     @ApiOperation("Actualiza en base de datos un usuario existente")
     public ResponseEntity<User> updateUser(
             @ApiParam("Información del usuario")
